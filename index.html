@@ -1,0 +1,1601 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>구직 현황과 인사이트</title>
+<style>
+  @font-face {
+    font-family: "Pretendard Variable";
+    src: url("assets/fonts/PretendardVariable.woff2") format("woff2-variations");
+    font-weight: 45 920; font-style: normal; font-display: swap;
+  }
+  :root {
+    color-scheme: light;
+    --font: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+
+    --plane:   #f1f3f7;
+    --surface: #fdfdfe;
+    --well:    #f5f6f9;
+    --ink:     #141a26;
+    --ink-2:   #454e63;
+    --muted:   #646d82;
+    --grid:    #e5e8ef;
+    --axis:    #c8cdd9;
+    --border:  rgba(20,26,38,0.09);
+    --shadow:  0 1px 2px rgba(20,26,38,0.05), 0 6px 18px -8px rgba(20,26,38,0.10);
+
+    --brand:      #2f54eb;
+    --brand-ink:  #2445cf;
+    --brand-soft: #e9eeff;
+    --hero:       #2f54eb;
+    --hero-ink:   #ffffff;
+    --good-text:  #0b7a3b;
+    --bad-text:   #bf3b22;
+
+    /* 결과 색: 진행=브랜드, 합격=그린, 탈락=도달 단계가 깊을수록 진한 코랄, 철회=회색 */
+    --s-offer: #14a352;
+    --s-live:  #2f54eb;
+    --s-doc:   #f3b09d;
+    --s-test:  #e46c4f;
+    --s-itv:   #a9341e;
+    --s-out:   #a3a9b8;
+
+    --ramp-1: #cdd7ff; --ramp-2: #98abff; --ramp-3: #5f7cff;
+    --ramp-4: #2f54eb; --ramp-5: #1a33a6;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:where(:not([data-theme="light"])) {
+      color-scheme: dark;
+      --plane: #0e1117; --surface: #161a22; --well: #1b2029; --ink: #eef1f6; --ink-2: #b6bdcc;
+      --muted: #8e97aa; --grid: #252b36; --axis: #353c4a; --border: rgba(255,255,255,0.07);
+      --shadow: none;
+      --brand: #7d96ff; --brand-ink: #a3b4ff; --brand-soft: rgba(125,150,255,0.14);
+      --hero: #2a46cc; --hero-ink: #ffffff; --good-text: #4fd08a; --bad-text: #ff9a80;
+      --s-offer: #35c47a; --s-live: #7d96ff; --s-doc: #8e6058; --s-test: #e06a4e; --s-itv: #ffab93; --s-out: #5d6575;
+      --ramp-1: #cad4ff; --ramp-2: #a3b4ff; --ramp-3: #7d96ff; --ramp-4: #5673f0; --ramp-5: #3a55d6;
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --plane: #0e1117; --surface: #161a22; --well: #1b2029; --ink: #eef1f6; --ink-2: #b6bdcc;
+    --muted: #8e97aa; --grid: #252b36; --axis: #353c4a; --border: rgba(255,255,255,0.07);
+    --shadow: none;
+    --brand: #7d96ff; --brand-ink: #a3b4ff; --brand-soft: rgba(125,150,255,0.14);
+    --hero: #2a46cc; --hero-ink: #ffffff; --good-text: #4fd08a; --bad-text: #ff9a80;
+    --s-offer: #35c47a; --s-live: #7d96ff; --s-doc: #8e6058; --s-test: #e06a4e; --s-itv: #ffab93; --s-out: #5d6575;
+    --ramp-1: #cad4ff; --ramp-2: #a3b4ff; --ramp-3: #7d96ff; --ramp-4: #5673f0; --ramp-5: #3a55d6;
+  }
+
+  * { box-sizing: border-box; }
+  html { background: var(--plane); }
+  body {
+    margin: 0; background: var(--plane); color: var(--ink);
+    font: 14px/1.6 var(--font); letter-spacing: -0.005em;
+    -webkit-font-smoothing: antialiased; caret-color: var(--brand);
+  }
+  ::selection { background: var(--brand-soft); color: var(--ink); }
+  :focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; border-radius: 6px; }
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-thumb { background: var(--axis); border-radius: 10px; border: 3px solid transparent; background-clip: padding-box; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  code { font: 12px/1.4 ui-monospace, SFMono-Regular, Menlo, monospace; }
+  b { font-weight: 650; }
+
+  .wrap { max-width: 1160px; margin: 0 auto; padding: 44px 28px 72px; }
+
+  /* ── 머리 ── */
+  header.top { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; margin-bottom: 26px; }
+  .brandmark { width: 40px; height: 40px; flex: none; display: block; }
+  header.top h1 { font-size: 22px; line-height: 1.25; font-weight: 750; margin: 0; letter-spacing: -0.025em; }
+  header.top .sub { color: var(--muted); font-size: 12.5px; margin: 2px 0 0; display: flex; gap: 14px; flex-wrap: wrap; }
+  header.top .sub b { color: var(--ink-2); font-variant-numeric: tabular-nums; }
+  header.top .sub code { font-size: 11.5px; }
+  .spacer { flex: 1 1 auto; }
+  .sync { display: flex; align-items: center; gap: 12px; }
+  .sync-status { color: var(--muted); font-size: 12px; max-width: 300px; text-align: right; }
+  .sync-status.ok { color: var(--good-text); }
+  .sync-status.error { color: var(--bad-text); }
+
+  button { font: inherit; }
+  [hidden] { display: none !important; }
+  button.ghost, a.ghost {
+    display: inline-flex; align-items: center; gap: 7px;
+    background: var(--surface); color: var(--ink-2); border: 1px solid var(--border);
+    border-radius: 9px; padding: 7px 13px; font-size: 13px; font-weight: 550; cursor: pointer;
+  }
+  button.ghost:hover, a.ghost:hover { color: var(--ink); border-color: var(--axis); }
+  a.ghost { text-decoration: none; }
+  button.primary {
+    display: inline-flex; align-items: center; gap: 7px;
+    background: var(--brand); color: #fff; border: 0; border-radius: 9px;
+    padding: 8px 15px; font-size: 13px; font-weight: 650; cursor: pointer;
+  }
+  :root[data-theme="dark"] button.primary { color: #0e1117; }
+  @media (prefers-color-scheme: dark) { :root:where(:not([data-theme="light"])) button.primary { color: #0e1117; } }
+  button.primary:hover { filter: brightness(1.07); }
+  button.primary:disabled, button.ghost:disabled { cursor: progress; opacity: .7; }
+  button.icon { padding: 7px; width: 36px; height: 36px; justify-content: center; }
+  button svg { width: 16px; height: 16px; flex: none; }
+  button.busy svg { animation: spin 0.9s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @media (prefers-reduced-motion: reduce) { button.busy svg { animation: none; } }
+
+  /* ── 탭: 세그먼트 컨트롤 ── */
+  nav.tabs {
+    display: inline-flex; gap: 2px; padding: 3px; margin: 0 0 22px;
+    background: var(--grid); border-radius: 11px;
+  }
+  nav.tabs button {
+    background: none; border: 0; border-radius: 8px; color: var(--ink-2);
+    font-size: 13.5px; font-weight: 550; padding: 6px 18px; cursor: pointer;
+  }
+  nav.tabs button:hover { color: var(--ink); }
+  nav.tabs button[aria-selected="true"] {
+    background: var(--surface); color: var(--ink); font-weight: 700;
+    box-shadow: 0 1px 2px rgba(20,26,38,0.10);
+  }
+  .pane[hidden] { display: none; }
+
+  /* ── 면 ── */
+  section.card {
+    background: var(--surface); border-radius: 14px; box-shadow: var(--shadow);
+    padding: 22px 24px 20px; margin-bottom: 16px;
+  }
+  :root[data-theme="dark"] section.card { box-shadow: inset 0 0 0 1px var(--border); }
+  @media (prefers-color-scheme: dark) { :root:where(:not([data-theme="light"])) section.card { box-shadow: inset 0 0 0 1px var(--border); } }
+  section.card > h2 { font-size: 16px; line-height: 1.35; font-weight: 700; margin: 0 0 4px; letter-spacing: -0.02em; }
+  section.card > p.desc { font-size: 12.5px; line-height: 1.6; color: var(--muted); margin: 0 0 18px; max-width: 68em; }
+  section.card > p.desc b { color: var(--ink-2); }
+  p.desc code, .src code { font-size: 11.5px; }
+  .scrollx { overflow-x: auto; }
+
+  .legend { display: flex; gap: 16px; flex-wrap: wrap; margin: 14px 0 0; font-size: 12px; color: var(--ink-2); }
+  .legend span.item { display: inline-flex; align-items: center; gap: 7px; }
+  .legend i { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+
+  svg { display: block; }
+  svg text { font-family: var(--font); }
+  .tick { fill: var(--muted); font-size: 11px; }
+  .tick.tab, .val.tab { font-variant-numeric: tabular-nums; }
+  .lbl { fill: var(--ink-2); font-size: 12px; }
+  .val { fill: var(--ink); font-size: 12px; font-weight: 650; }
+  .gridline { stroke: var(--grid); stroke-width: 1; }
+  .axisline { stroke: var(--axis); stroke-width: 1; }
+  .mark { stroke: var(--surface); stroke-width: 1.5; }
+  .mark:hover { filter: brightness(1.1); }
+
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 860px) { .two { grid-template-columns: 1fr; } }
+
+  /* ── 해석 카드: 면 안의 면 대신 선으로 나눈 2열 ── */
+  .findings { display: grid; grid-template-columns: 1fr 1fr; gap: 0 32px; }
+  @media (max-width: 860px) { .findings { grid-template-columns: 1fr; } }
+  .finding { display: flex; flex-direction: column; padding: 16px 0 18px; border-top: 1px solid var(--grid); }
+  .finding h3 { font-size: 14.5px; line-height: 1.45; font-weight: 700; margin: 0 0 6px; letter-spacing: -0.015em; }
+  .finding p { margin: 0 0 6px; font-size: 13px; color: var(--ink-2); }
+  .finding b { color: var(--ink); }
+  .finding .tag { order: 9; font-size: 11.5px; color: var(--muted); margin-top: 6px; }
+
+  /* ── 표 ── */
+  table { border-collapse: collapse; width: 100%; font-size: 13px; }
+  th, td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--grid); white-space: nowrap; }
+  th { color: var(--muted); font-weight: 600; font-size: 12px; cursor: pointer; user-select: none;
+       position: sticky; top: 0; background: var(--surface); z-index: 1; }
+  th:hover { color: var(--ink); }
+  th[aria-sort] { color: var(--brand-ink); }
+  th[aria-sort]::after { content: ""; display: inline-block; margin-left: 6px; vertical-align: 2px;
+    border: 4px solid transparent; }
+  th[aria-sort="ascending"]::after { border-bottom-color: currentColor; border-top-width: 0; }
+  th[aria-sort="descending"]::after { border-top-color: currentColor; border-bottom-width: 0; }
+  td.num { font-variant-numeric: tabular-nums; color: var(--ink-2); }
+  td .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 9px; vertical-align: 1px; }
+  tbody tr:hover { background: var(--brand-soft); }
+  .tblwrap { max-height: 560px; overflow: auto; border-radius: 10px; }
+  #tbl td.co { max-width: 340px; }
+  #tbl td.co .memo { font-size: 12px; color: var(--muted); margin: 2px 0 0 17px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+  .tip {
+    position: fixed; pointer-events: none; z-index: 40; opacity: 0; transform: translate(-50%, -100%);
+    background: var(--ink); color: var(--surface);
+    border-radius: 9px; padding: 9px 11px; font-size: 12px; line-height: 1.5;
+    box-shadow: 0 10px 28px -6px rgba(10,14,22,0.35); max-width: 300px; transition: opacity .1s;
+  }
+  .tip b { display: block; margin-bottom: 2px; }
+  .tip .m { color: var(--surface); opacity: .78; }
+
+  footer.foot { color: var(--muted); font-size: 12px; margin-top: 30px; line-height: 1.8; }
+  footer.foot b { color: var(--ink-2); }
+
+  /* ── 필터 ── */
+  .filters { display: flex; gap: 12px; flex-wrap: wrap; align-items: flex-end; margin-bottom: 18px; }
+  .filters label { font-size: 12px; color: var(--muted); display: flex; flex-direction: column; gap: 5px; font-weight: 550; }
+  .filters select {
+    appearance: none; -webkit-appearance: none;
+    background: var(--surface) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23646d82' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 10px center;
+    color: var(--ink); border: 1px solid var(--border); border-radius: 9px;
+    padding: 7px 30px 7px 11px; font: inherit; font-size: 13px; min-width: 140px; cursor: pointer;
+  }
+  .filters .note { font-size: 12px; color: var(--muted); padding-bottom: 9px; font-variant-numeric: tabular-nums; }
+
+  /* ── 브리핑: 헤드라인(화면에서 유일하게 색을 채운 면) ── */
+  .headline {
+    background: var(--hero); color: var(--hero-ink);
+    border-radius: 16px; padding: 26px 30px 22px; margin-bottom: 16px;
+  }
+  .headline .lead { font-size: 19px; line-height: 1.6; font-weight: 500; letter-spacing: -0.02em; margin: 0; max-width: 56em; }
+  .headline .lead b { font-weight: 750; color: #fff; }
+  .headline .src { font-size: 12px; color: rgba(255,255,255,0.8); margin: 12px 0 0; }
+
+  /* ── 최근 변화 ── */
+  .changes { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 0 28px; }
+  .changes li { font-size: 13px; color: var(--ink-2); padding: 9px 0 9px 16px; border-top: 1px solid var(--grid); position: relative; }
+  .changes li::before { content: ""; position: absolute; left: 0; top: 17px; width: 6px; height: 6px; border-radius: 50%; background: var(--brand); }
+  .changes li.empty::before { background: var(--axis); }
+  @media (max-width: 760px) { .changes { grid-template-columns: 1fr; } }
+
+  /* ── 데이터 신뢰도: 칸 대신 세로선 ── */
+  .quality { display: grid; grid-template-columns: 1fr 1fr; row-gap: 20px; }
+  .quality .qcell { padding: 2px 20px; border-left: 1px solid var(--grid); }
+  .quality .qcell:nth-child(odd) { padding-left: 0; border-left: 0; }
+  .quality .qk { display: block; font-size: 12px; color: var(--muted); margin-bottom: 4px; }
+  .quality .qv { display: block; font-size: 16px; color: var(--ink); font-weight: 700; letter-spacing: -0.015em; }
+  .quality .qd { display: block; font-size: 12px; color: var(--ink-2); margin-top: 4px; line-height: 1.5; }
+  .quality .hold .qv { color: var(--bad-text); }
+  .quality .usable .qv { color: var(--brand-ink); }
+
+  /* ── 브리핑 2열 ── */
+  .brief { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: start; }
+  .brief { margin-bottom: 16px; }
+  .brief > section.card, .stack > section.card:last-child { margin-bottom: 0; }
+  .stack { display: flex; flex-direction: column; gap: 16px; }
+  .brief > *, .two > *, .stack > * { min-width: 0; }
+  .stack > section.card { margin-bottom: 0; }
+  @media (max-width: 900px) { .brief { grid-template-columns: 1fr; } .brief > section.card { margin-bottom: 16px; } }
+
+  /* ── D-day ── */
+  .dday { list-style: none; margin: 0; padding: 0; }
+  .dday li {
+    display: grid; grid-template-columns: 64px 1fr; gap: 14px; align-items: center;
+    padding: 12px 0; border-top: 1px solid var(--grid);
+  }
+  .dday li:first-child { border-top: 0; padding-top: 2px; }
+  .dday .cd {
+    font-size: 15px; font-weight: 750; font-variant-numeric: tabular-nums; letter-spacing: -0.02em;
+    color: var(--brand-ink); background: var(--brand-soft); border-radius: 9px; text-align: center; padding: 7px 0;
+  }
+  .dday li.soon .cd { color: #fff; background: var(--brand); }
+  :root[data-theme="dark"] .dday li.soon .cd { color: #0e1117; }
+  @media (prefers-color-scheme: dark) { :root:where(:not([data-theme="light"])) .dday li.soon .cd { color: #0e1117; } }
+  .dday .co { font-size: 14px; font-weight: 650; color: var(--ink); }
+  .dday .ev { font-size: 12.5px; font-weight: 400; color: var(--ink-2); margin-top: 3px; }
+  .dday .kd {
+    display: inline-block; font-size: 11px; font-weight: 600; padding: 1px 7px; border-radius: 6px;
+    background: var(--well); color: var(--ink-2); margin-right: 7px; vertical-align: 1px;
+  }
+  .dday .kd.마감 { background: transparent; color: var(--bad-text); box-shadow: inset 0 0 0 1px currentColor; }
+
+  /* ── 살아있는 파이프라인: 큰 숫자 + 이름, 선으로 구분 ── */
+  .bucket { display: flex; flex-direction: column; }
+  .bkt { display: grid; grid-template-columns: 52px 1fr; column-gap: 12px; padding: 12px 0; border-top: 1px solid var(--grid); }
+  .bkt:first-child { border-top: 0; padding-top: 2px; }
+  .bkt .hd { display: contents; }
+  .bkt .hd .n { grid-row: span 2; font-size: 26px; line-height: 1.1; font-weight: 750; letter-spacing: -0.03em;
+    font-variant-numeric: tabular-nums; color: var(--ink); }
+  .bkt .hd .t { font-size: 13.5px; font-weight: 650; }
+  .bkt .hd .q { grid-column: 2; font-size: 12px; color: var(--muted); }
+  .bkt .names { grid-column: 2; font-size: 12.5px; color: var(--ink-2); margin-top: 4px; line-height: 1.55; }
+  .bkt.live .hd .n { color: var(--brand); }
+  .bkt.ghost .hd .n { color: var(--muted); }
+
+  /* ── 관측 수율·병목 막대 ── */
+  .hit { list-style: none; margin: 0; padding: 0; font-size: 13px; }
+  .hit li { display: grid; grid-template-columns: 124px 1fr 132px; gap: 12px; align-items: center; padding: 6px 0; }
+  .hit .bar { height: 8px; border-radius: 4px; background: var(--well); position: relative; overflow: hidden; }
+  :root[data-theme="dark"] .hit .bar { background: var(--grid); }
+  @media (prefers-color-scheme: dark) { :root:where(:not([data-theme="light"])) .hit .bar { background: var(--grid); } }
+  .hit .bar i { position: absolute; inset: 0 auto 0 50%; display: block; border-radius: 4px; }
+  .hit .nm { color: var(--ink-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .hit .mx { font-variant-numeric: tabular-nums; color: var(--ink); text-align: right; font-weight: 600; }
+  .hit .mx .axis { font-weight: 400; margin-left: 6px; }
+  .hit li.thin { opacity: .5; }
+  .hit .axis { color: var(--muted); font-size: 11.5px; }
+
+  /* ── 요약 수치 줄: 카드 5개 대신 한 면을 세로선으로 ── */
+  .tiles {
+    display: grid; grid-template-columns: repeat(5, 1fr);
+    background: var(--surface); border-radius: 14px; box-shadow: var(--shadow); padding: 20px 4px;
+  }
+  :root[data-theme="dark"] .tiles { box-shadow: inset 0 0 0 1px var(--border); }
+  @media (prefers-color-scheme: dark) { :root:where(:not([data-theme="light"])) .tiles { box-shadow: inset 0 0 0 1px var(--border); } }
+  @media (max-width: 900px) { .tiles { grid-template-columns: repeat(2, 1fr); row-gap: 18px; } }
+  .tile { padding: 0 20px; border-left: 1px solid var(--grid); }
+  .tile:first-child { border-left: 0; }
+  .tile .k { font-size: 12px; color: var(--muted); margin-bottom: 4px; }
+  .tile .v { font-size: 26px; line-height: 1.15; font-weight: 750; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
+  .tile .v small { font-size: 13px; font-weight: 500; color: var(--ink-2); letter-spacing: 0; margin-left: 3px; }
+  .tile .d { font-size: 12px; color: var(--ink-2); margin-top: 4px; }
+
+  .gl { width: 100%; height: 420px; }
+  .gl.tall { height: 520px; }
+  .gl.terrain { min-height: 580px; }
+  .note-inline { font-size: 12.5px; color: var(--ink-2); margin: 12px 0 0; }
+
+  @media (max-width: 640px) {
+    .wrap { padding: 28px 16px 56px; }
+    .headline { padding: 20px 20px 18px; }
+    .headline .lead { font-size: 17px; }
+    .hit li { grid-template-columns: 96px 1fr 110px; }
+  }
+
+  /* ── 오늘 탭 v1.3 ── */
+  .tiles { margin-bottom: 16px; }
+  .trio { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; align-items: start; margin-bottom: 16px; }
+  .trio > * { min-width: 0; }
+  .trio > section.card { margin-bottom: 0; }
+  @media (max-width: 980px) { .trio { grid-template-columns: 1fr; } }
+  .empty-note { margin: 0; font-size: 13px; color: var(--muted); }
+  .rowlist { list-style: none; margin: 0; padding: 0; }
+  .rowlist li { padding: 11px 0; border-top: 1px solid var(--grid); }
+  .rowlist li:first-child { border-top: 0; padding-top: 2px; }
+  .rowlist.compact li { padding: 8px 0; }
+  .rl-top { display: flex; align-items: center; gap: 8px; font-size: 14px; }
+  .rl-top b { font-weight: 650; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .rl-top .dot { width: 8px; height: 8px; border-radius: 50%; flex: none; }
+  .rl-date { margin-left: auto; font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; flex: none; }
+  .rl-sub { font-size: 12.5px; color: var(--ink-2); margin-top: 3px; }
+  .rl-meta { font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .pill { flex: none; font-size: 11.5px; font-weight: 650; color: var(--brand-ink); background: var(--brand-soft); border-radius: 6px; padding: 1px 7px; }
+
+  .waitgroups { display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 0 28px; margin-top: 14px; }
+  @media (max-width: 900px) { .waitgroups { grid-template-columns: 1fr; } }
+  .wg { padding-top: 12px; border-top: 1px solid var(--grid); }
+  .wg-hd { display: flex; align-items: baseline; gap: 8px; }
+  .wg-hd .n { font-size: 24px; font-weight: 750; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
+  .wg-hd .t { font-size: 14px; font-weight: 650; }
+  .wg.due .wg-hd .n { color: var(--brand); }
+  .wg.late .wg-hd .n { color: var(--muted); }
+  .wg .q { font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .wg .names { font-size: 12.5px; color: var(--ink-2); margin-top: 6px; line-height: 1.7; }
+  .wg .age { color: var(--muted); font-variant-numeric: tabular-nums; }
+
+  .seglist { list-style: none; margin: 0; padding: 0; font-size: 13px; }
+  .seglist li { display: grid; grid-template-columns: 130px 1fr 92px; gap: 12px; align-items: center; padding: 5px 0; }
+  .seglist .nm { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--ink); }
+  .seglist .nm .axis { color: var(--muted); font-size: 11.5px; margin-right: 2px; }
+  .seglist .bar { position: relative; height: 8px; border-radius: 4px; background: var(--well); }
+  :root[data-theme="dark"] .seglist .bar { background: var(--grid); }
+  @media (prefers-color-scheme: dark) { :root:where(:not([data-theme="light"])) .seglist .bar { background: var(--grid); } }
+  .seglist .bar i { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 4px; background: var(--brand); }
+  .seglist li.under .bar i { background: var(--s-test); }
+  .seglist .bar u { position: absolute; top: -4px; bottom: -4px; width: 2px; margin-left: -1px; background: var(--ink-2); border-radius: 1px; }
+  .seglist .mx { text-align: right; font-weight: 650; font-variant-numeric: tabular-nums; }
+  .seglist .mx .axis { font-weight: 400; color: var(--muted); font-size: 11.5px; margin-left: 4px; }
+
+  .gates { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 8px; }
+  .gate { background: var(--well); border-radius: 10px; padding: 10px 12px; }
+  :root[data-theme="dark"] .gate { background: var(--grid); }
+  @media (prefers-color-scheme: dark) { :root:where(:not([data-theme="light"])) .gate { background: var(--grid); } }
+  .gate .g-to { display: block; font-size: 12px; color: var(--ink-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .gate .g-rate { display: block; font-size: 22px; font-weight: 750; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; margin-top: 2px; }
+  .gate .g-n { display: block; font-size: 11.5px; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .gate.worst .g-rate { color: var(--bad-text); }
+
+  .tblbar { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
+  .tblbar input[type=search] {
+    flex: 0 1 260px; min-width: 180px; font: inherit; font-size: 13px; color: var(--ink);
+    background: var(--well); border: 1px solid transparent; border-radius: 9px; padding: 7px 11px;
+  }
+  .tblbar input[type=search]:focus { outline: none; border-color: var(--brand); background: var(--surface); }
+  .tblbar input::placeholder { color: var(--muted); }
+  .chips { display: flex; gap: 6px; flex-wrap: wrap; }
+  .chips button { font-size: 12.5px; font-weight: 550; color: var(--ink-2); background: transparent; border: 1px solid var(--border); border-radius: 8px; padding: 5px 10px; cursor: pointer; }
+  .chips button:hover { color: var(--ink); border-color: var(--axis); }
+  .chips button[aria-pressed="true"] { color: var(--brand-ink); background: var(--brand-soft); border-color: transparent; font-weight: 650; }
+  .tcount { margin-left: auto; font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="top">
+  <svg class="brandmark" viewBox="100 100 824 824" aria-hidden="true">
+    <rect x="100" y="100" width="824" height="824" rx="186" fill="#3354EE"/>
+    <path d="M262 724H408V578H554V432H636" fill="none" stroke="#fff" stroke-width="76" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="742" cy="326" r="70" fill="#FFD43B"/>
+  </svg>
+  <div>
+    <h1>구직 현황과 인사이트</h1>
+    <p class="sub"><span id="hdrRange"></span><span>제출 <b id="hdrN"></b>건</span><span id="hdrSrc"></span></p>
+  </div>
+  <div class="spacer"></div>
+  <div class="sync">
+    <span class="sync-status" id="syncStatus"></span>
+    <a class="ghost" href="sample.csv" download="jobdash-양식.csv">양식 CSV</a>
+    <button class="ghost" id="sampleBtn" hidden>예시로 되돌리기</button>
+    <input type="file" id="csvFile" accept=".csv,text/csv" hidden>
+    <button class="primary" id="importBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15V3"/><path d="m7 8 5-5 5 5"/><path d="M4 15v4a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-4"/></svg><span>CSV 가져오기</span></button>
+  </div>
+  <button class="ghost icon" id="themeBtn" aria-label="밝은 화면과 어두운 화면 전환" title="밝은 화면과 어두운 화면 전환"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 3.5a8.5 8.5 0 0 1 0 17Z" fill="currentColor" stroke="none"/></svg></button>
+</header>
+
+<nav class="tabs" id="tabs" role="tablist">
+  <button role="tab" data-pane="brief" aria-controls="pane-brief" aria-selected="true">오늘</button>
+  <button role="tab" data-pane="stats" aria-controls="pane-stats" aria-selected="false">분석</button>
+  <button role="tab" data-pane="table" aria-controls="pane-table" aria-selected="false">내역</button>
+</nav>
+
+<!-- ═══════════════ 오늘 ═══════════════ -->
+<div class="pane" id="pane-brief">
+
+  <div class="headline">
+    <p class="lead" id="headline">…</p>
+    <p class="src" id="headlineSrc"></p>
+  </div>
+
+  <div class="tiles" id="tiles"></div>
+
+  <section class="card" id="recentChangesCard" hidden>
+    <h2>지난 가져오기 이후 달라진 것</h2>
+    <p class="desc" id="recentChangesMeta"></p>
+    <ul class="changes" id="recentChanges"></ul>
+  </section>
+
+  <div class="trio">
+    <section class="card">
+      <h2>다가오는 일정</h2>
+      <p class="desc">CSV의 다음 일정 열 기준. <b id="ddayLead"></b></p>
+      <ul class="dday" id="ddayList"></ul>
+    </section>
+    <section class="card">
+      <h2>서류를 넘은 지원</h2>
+      <p class="desc" id="aliveDesc"></p>
+      <div id="alive"></div>
+    </section>
+    <section class="card">
+      <h2>최근 2주 결과</h2>
+      <p class="desc" id="recentDesc"></p>
+      <div id="recentResults"></div>
+    </section>
+  </div>
+
+  <section class="card">
+    <h2>결과 기다리는 지원</h2>
+    <p class="desc" id="waitDesc"></p>
+    <div class="scrollx"><svg id="chWait" role="img" aria-label="제출 후 지난 날짜별 결과 대기 지원"></svg></div>
+    <div class="waitgroups" id="waitGroups"></div>
+  </section>
+
+  <div class="brief">
+    <section class="card">
+      <h2>어디서 서류가 잘 붙었나</h2>
+      <p class="desc">결과가 나온 지원만 센 서류 통과율. 확정 8건 이상인 묶음만 보여 준다. 원인이 아니라 지금까지의 관측치다.</p>
+      <ul class="seglist" id="where"></ul>
+      <p class="note-inline" id="whereNote"></p>
+    </section>
+    <div class="stack">
+      <section class="card">
+        <h2>관문별 통과율</h2>
+        <p class="desc">각 관문의 결과가 나온 건만 분모로 쓴다.</p>
+        <div class="gates" id="gates"></div>
+        <p class="note-inline" id="gatesNote"></p>
+      </section>
+      <section class="card">
+        <h2>지원 페이스</h2>
+        <p class="desc" id="paceDesc"></p>
+        <div class="scrollx"><svg id="chPace" role="img" aria-label="최근 12주 주별 제출 건수"></svg></div>
+      </section>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ 통계 ═══════════════ -->
+<div class="pane" id="pane-stats" hidden>
+
+<div class="filters">
+  <label>기관유형<select id="fT"></select></label>
+  <label>고용형태<select id="fE"></select></label>
+  <label>직무축<select id="fJ"></select></label>
+  <button class="ghost" id="fReset">필터 해제</button>
+  <span class="note" id="fCount"></span>
+</div>
+
+<section class="card">
+  <h2>주별 지원량과 결과 구성</h2>
+  <p class="desc">막대 = 그 주에 <b>제출</b>한 건, 색 = 그 건의 현재 결과. 점선 = 3주 이동평균(제출 건수).</p>
+  <div class="scrollx"><svg id="chWeek" role="img" aria-label="주별 지원 건수와 결과 구성"></svg></div>
+  <div class="legend" id="legWeek"></div>
+</section>
+
+<div class="two">
+  <section class="card">
+    <h2>전형 깔때기</h2>
+    <p class="desc">단계별 생존 인원과 직전 단계 대비 전환율.</p>
+    <div class="scrollx"><svg id="chFunnel" role="img" aria-label="전형 단계별 생존 깔때기"></svg></div>
+  </section>
+  <section class="card">
+    <h2>어디서 죽었나</h2>
+    <p class="desc">종결된 건의 사망 단계 분포. 철회·취소는 본인 선택이라 따로 센다.</p>
+    <div class="scrollx"><svg id="chDeath" role="img" aria-label="사망 단계 분포"></svg></div>
+  </section>
+</div>
+
+<section class="card">
+  <h2>서류 통과율 추세 — 제출 월 기준</h2>
+  <p class="desc">해당 월에 제출한 건 중 <b>서류 결과가 이미 나온 것</b>만 분모. 회색 기준선 = 전체 평균. n이 작은 달은 해석 주의.</p>
+  <div class="scrollx"><svg id="chTrend" role="img" aria-label="월별 서류 통과율 추세"></svg></div>
+</section>
+
+<section class="card">
+  <h2>세그먼트별 서류 통과율</h2>
+  <p class="desc">같은 분모 규칙(결과가 나온 건). 막대 오른쪽 숫자는 통과/결정 건수. <b>n &lt; 5는 흐리게</b> 표시했다 — 추세로 읽지 말 것.</p>
+  <div class="scrollx"><svg id="chSeg" role="img" aria-label="세그먼트별 서류 통과율"></svg></div>
+</section>
+
+<section class="card">
+  <h2>제출 → 결과 리드타임</h2>
+  <p class="desc">결과가 통보되기까지 걸린 일수. <b>제출일과 결과일이 모두 정확한 건만</b> 사용한다.</p>
+  <div class="scrollx"><svg id="chLead" role="img" aria-label="제출에서 결과까지 리드타임 분포"></svg></div>
+</section>
+
+<section class="card">
+  <h2>관측 → 해석</h2>
+  <p class="desc">필터와 관계없이 전체 기록에서 계산한 관측치다. 관측된 격차를 탈락 원인으로 단정하지 않는다.</p>
+  <div class="findings" id="findings"></div>
+</section>
+
+<section class="card">
+  <h2>데이터 신뢰도</h2>
+  <p class="desc">필터와 관계없이 전체 기록 기준. 판단에 쓴 표본과 아직 결론 낼 수 없는 부분을 나눈다.</p>
+  <div class="quality" id="dataQuality"></div>
+</section>
+
+</div>
+
+<!-- ═══════════════ 내역 ═══════════════ -->
+<div class="pane" id="pane-table" hidden>
+<section class="card">
+  <h2>전체 지원 내역</h2>
+  <p class="desc">열 제목을 누르면 정렬. 분석 탭의 필터도 함께 적용된다. <span id="estNote"></span></p>
+  <div class="tblbar">
+    <input type="search" id="q" placeholder="회사, 직무, 메모 검색" aria-label="지원 내역 검색">
+    <div class="chips" id="oChips" role="group" aria-label="결과로 거르기">
+      <button data-o="all" aria-pressed="true">전체</button>
+      <button data-o="live" aria-pressed="false">진행중</button>
+      <button data-o="pass" aria-pressed="false">서류 통과 이상</button>
+      <button data-o="dead" aria-pressed="false">탈락</button>
+      <button data-o="out" aria-pressed="false">철회·취소·무응답</button>
+    </div>
+    <span class="tcount" id="tCount"></span>
+  </div>
+  <div class="tblwrap"><table id="tbl"><thead></thead><tbody></tbody></table></div>
+</section>
+</div>
+
+<footer class="foot">
+  데이터는 이 브라우저 안에만 저장되고 어디로도 보내지 않는다. 다른 기기나 브라우저에서는 CSV를 다시 가져와야 한다.<br>
+  제출일을 추정으로 표시한 <b><span id="estFooter"></span>건</b>은 표에 ~ 로 표시하고 소요일 계산에서 뺀다.<br>
+  철회·취소·무응답은 빗금으로 칠한다. 취소는 통과율·깔때기 계산에서 빼고, 철회·무응답은 결과가 안 나온 관문의 통과율 분모에서 뺀다. 서류를 넘긴 뒤 철회한 건은 서류 통과로 센다.
+</footer>
+
+</div>
+
+<div class="tip" id="tip"></div>
+<script src="csv.js"></script>
+<script src="sample-data.js"></script>
+<script>
+/* ─────────────────────────── 공통 ─────────────────────────── */
+const $ = s => document.querySelector(s);
+const SVGNS = "http://www.w3.org/2000/svg";
+const el = (n, a = {}) => { const e = document.createElementNS(SVGNS, n); for (const k in a) e.setAttribute(k, a[k]); return e; };
+const fmtPct = v => Number.isFinite(v) ? (v * 100).toFixed(0) + "%" : "—"; // 분모 0이면 —
+const day = s => new Date(s + "T00:00:00");
+const daysBetween = (a, b) => Math.round((day(b) - day(a)) / 86400000);
+const TODAY = (() => { const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`; })();
+
+/* 데이터: 가져온 CSV가 있으면 그것, 없으면 예시. 예시 날짜는 오늘 기준으로 옮긴다. */
+const STORE_KEY = "jobdash.csv.v1";
+const STORED = (() => { try { return localStorage.getItem(STORE_KEY); } catch (_) { return null; } })();
+const LOADED = (() => {
+  if (STORED) {
+    const r = JobdashCSV.parse(STORED, { today: TODAY });
+    if (!r.errors.length && r.records.length) return { ...r, sample: false };
+  }
+  return { ...JobdashCSV.parse(window.SAMPLE_CSV, { today: TODAY, shiftTo: TODAY, anchor: window.SAMPLE_ANCHOR }), sample: true };
+})();
+const RECORDS = LOADED.records;
+
+const OUT = {
+  PENDING:        { label: "진행중",        color: "var(--s-live)",  group: "live"   },
+  DOC_FAIL:       { label: "서류 탈락",     color: "var(--s-doc)",   group: "dead"   },
+  TEST_FAIL:      { label: "필기·코테 탈락", color: "var(--s-test)",  group: "dead"   },
+  ASSESS_FAIL:    { label: "인성검사 탈락",  color: "var(--s-test)",  group: "dead"   },
+  ITV_FAIL:       { label: "면접 탈락",     color: "var(--s-itv)",   group: "dead"   },
+  OFFER:          { label: "최종합격",      color: "var(--s-offer)", group: "offer"  },
+  OFFER_DECLINED: { label: "최종합격(고사)", color: "var(--s-offer)", group: "offer"  },
+  WITHDRAW:       { label: "자진 철회",     color: "var(--s-out)",   group: "out"    },
+  CANCEL:         { label: "지원 취소",     color: "var(--s-out)",   group: "out"    },
+  NORESP:         { label: "무응답",        color: "var(--s-out)",   group: "out"    },
+};
+/* 범례·스택 순서 — 팔레트 검증을 통과한 인접 순서를 그대로 유지한다 */
+const STACK = ["OFFER", "PENDING", "DOC_FAIL", "TEST_FAIL", "ITV_FAIL", "WITHDRAW"];
+const stackKey = r => {
+  if (r.o === "OFFER_DECLINED") return "OFFER";
+  if (r.o === "ASSESS_FAIL") return "TEST_FAIL";
+  if (r.o === "CANCEL" || r.o === "NORESP") return "WITHDRAW";
+  return r.o;
+};
+
+/* 분모 규칙: 서류 결과가 실제로 나온 건만 */
+const isDecided = r => r.s >= 2 || r.o === "DOC_FAIL";
+const isDocPass = r => r.s >= 2;
+const isCounted = r => r.o !== "CANCEL";
+
+/* ─────────────────────────── 툴팁 ─────────────────────────── */
+const tip = $("#tip");
+function showTip(e, html) {
+  tip.innerHTML = html;
+  tip.style.opacity = 1;
+  const pad = 12;
+  let x = e.clientX, y = e.clientY - pad;
+  tip.style.left = Math.min(Math.max(x, 150), window.innerWidth - 150) + "px";
+  tip.style.top = Math.max(y, 60) + "px";
+}
+const hideTip = () => { tip.style.opacity = 0; };
+function bindTip(node, html) {
+  node.addEventListener("mousemove", e => showTip(e, html));
+  node.addEventListener("mouseleave", hideTip);
+}
+
+/* ─────────────────────────── 필터 ─────────────────────────── */
+const FILTERS = { t: "전체", e: "전체", j: "전체" };
+function uniq(key) { return ["전체", ...[...new Set(RECORDS.map(r => r[key]))]]; }
+function fill(sel, key) {
+  const s = $(sel);
+  uniq(key).forEach(v => { const o = document.createElement("option"); o.value = v; o.textContent = v; s.appendChild(o); });
+  s.addEventListener("change", () => { FILTERS[key] = s.value; renderAll(); });
+}
+function filtered() {
+  return RECORDS.filter(r =>
+    (FILTERS.t === "전체" || r.t === FILTERS.t) &&
+    (FILTERS.e === "전체" || r.e === FILTERS.e) &&
+    (FILTERS.j === "전체" || r.j === FILTERS.j));
+}
+
+/* ─────────────────────────── KPI ─────────────────────────── */
+function renderTiles() {
+  const all = RECORDS.filter(isCounted);
+  const decided = all.filter(isDecided);
+  const pass = all.filter(isDocPass);
+  const live = all.filter(r => r.o === "PENDING");
+  const offers = all.filter(r => r.s >= 5);
+  const cancelled = RECORDS.length - all.length;
+  const weeks = weekCounts(5), cur = weeks.at(-1).n;
+  const avg4 = weeks.slice(0, 4).reduce((a, w) => a + w.n, 0) / 4;
+  const t = [
+    { k: "총 제출", v: RECORDS.length, s: "건", d: cancelled ? `취소 ${cancelled}건 빼면 ${all.length}건` : "전부 유효" },
+    { k: "서류 통과율", v: fmtPct(pass.length / decided.length), s: "", d: `결과 나온 ${decided.length}건 중 ${pass.length}건` },
+    { k: "결과 대기", v: live.length, s: "건", d: `서류 통과 후 진행 ${live.filter(isDocPass).length}건` },
+    { k: "최종합격", v: offers.length, s: "건", d: offers.map(r => `${r.c} ${r.o === "OFFER_DECLINED" ? "고사" : "수락"}`).join(", ") || "아직 없음" },
+    { k: "이번 주 제출", v: cur, s: "건", d: `직전 4주 평균 ${avg4.toFixed(0)}건` },
+  ];
+  $("#tiles").innerHTML = t.map(x =>
+    `<div class="tile"><div class="k">${x.k}</div><div class="v">${x.v}<small>${x.s}</small></div><div class="d">${escapeHTML(x.d)}</div></div>`).join("");
+  $("#hdrN").textContent = RECORDS.length;
+  const dates = RECORDS.map(r => r.d).filter(Boolean).sort();
+  $("#hdrRange").textContent = dates.length ? `${dates[0]} ~ ${dates[dates.length - 1]}` : "제출 기록 없음";
+}
+
+/* ─────────────── 1. 주별 지원량 (스택 + 이동평균) ─────────────── */
+function renderWeek() {
+  const rows = filtered();
+  /* toISOString 은 UTC로 밀어버려 KST에서 하루가 어긋난다 — 로컬 기준으로 직접 찍는다 */
+  const ymd = x => `${x.getFullYear()}-${String(x.getMonth() + 1).padStart(2, "0")}-${String(x.getDate()).padStart(2, "0")}`;
+  const startMonday = d => { const x = day(d); const w = (x.getDay() + 6) % 7; x.setDate(x.getDate() - w); return ymd(x); };
+  const weeks = {};
+  rows.forEach(r => { const k = startMonday(r.d); (weeks[k] ||= []).push(r); });
+  const keys = Object.keys(weeks).sort();
+  if (!keys.length) { $("#chWeek").innerHTML = ""; return; }
+  /* 빈 주도 축에 남긴다 — 공백이 곧 정보 */
+  const first = day(keys[0]), last = day(keys[keys.length - 1]);
+  const axis = [];
+  for (let d = new Date(first); d <= last; d.setDate(d.getDate() + 7)) axis.push(ymd(d));
+
+  /* 카드 폭에 맞춘다. 주가 많아져도 가로 스크롤 없이 전체 기간이 보이게 한다. */
+  const W = Math.max(640, $("#chWeek").parentElement.clientWidth || 1060), H = 300;
+  const M = { t: 18, r: 18, b: 46, l: 34 };
+  const iw = W - M.l - M.r, ih = H - M.t - M.b;
+  const maxV = Math.max(4, ...axis.map(k => (weeks[k] || []).length));
+  const x = i => M.l + i * (iw / axis.length);
+  const bw = Math.max(6, Math.min(38, iw / axis.length * 0.66));
+  const y = v => M.t + ih - (v / maxV) * ih;
+
+  const svg = $("#chWeek");
+  svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+  svg.setAttribute("width", W); svg.setAttribute("height", H);
+  svg.innerHTML = "";
+
+  /* 해칭 패턴 (철회·취소) */
+  const defs = el("defs");
+  const pat = el("pattern", { id: "hatch", width: 6, height: 6, patternTransform: "rotate(45)", patternUnits: "userSpaceOnUse" });
+  pat.appendChild(el("rect", { width: 6, height: 6, fill: "var(--s-out)", "fill-opacity": 0.28 }));
+  pat.appendChild(el("line", { x1: 0, y1: 0, x2: 0, y2: 6, stroke: "var(--s-out)", "stroke-width": 2.4 }));
+  defs.appendChild(pat); svg.appendChild(defs);
+
+  for (let v = 0; v <= maxV; v += Math.ceil(maxV / 4)) {
+    svg.appendChild(el("line", { x1: M.l, y1: y(v), x2: W - M.r, y2: y(v), class: "gridline" }));
+    const t = el("text", { x: M.l - 8, y: y(v) + 4, class: "tick tab", "text-anchor": "end" }); t.textContent = v; svg.appendChild(t);
+  }
+
+  axis.forEach((k, i) => {
+    const rs = weeks[k] || [];
+    const cx = x(i) + (iw / axis.length - bw) / 2;
+    let acc = 0;
+    STACK.forEach(sk => {
+      const seg = rs.filter(r => stackKey(r) === sk);
+      if (!seg.length) return;
+      const h = (seg.length / maxV) * ih;
+      const yy = y(acc + seg.length);
+      const rect = el("rect", {
+        x: cx, y: yy, width: bw, height: Math.max(h - 2, 1), rx: 3, class: "mark",
+        fill: sk === "WITHDRAW" ? "url(#hatch)" : OUT[sk].color,
+      });
+      bindTip(rect, `<b>${k} 주</b><span class="m">${OUT[sk].label} ${seg.length}건</span><br>${seg.map(r => escapeHTML(r.c)).join(", ")}`);
+      svg.appendChild(rect);
+      acc += seg.length;
+    });
+    if (rs.length) {
+      const t = el("text", { x: cx + bw / 2, y: y(rs.length) - 6, class: "val", "text-anchor": "middle" });
+      t.textContent = rs.length; svg.appendChild(t);
+    }
+    if (i % 2 === 0) {
+      const t = el("text", { x: cx + bw / 2, y: H - 26, class: "tick", "text-anchor": "middle" });
+      t.textContent = k.slice(5).replace("-", "/"); svg.appendChild(t);
+    }
+  });
+
+  /* 3주 이동평균 — 주석선(계열 아님), 잉크 색 + 파선 */
+  const counts = axis.map(k => (weeks[k] || []).length);
+  const ma = counts.map((_, i) => {
+    const w = counts.slice(Math.max(0, i - 2), i + 1);
+    return w.reduce((a, b) => a + b, 0) / w.length;
+  });
+  const pts = ma.map((v, i) => `${x(i) + (iw / axis.length) / 2},${y(v)}`).join(" ");
+  svg.appendChild(el("polyline", { points: pts, fill: "none", stroke: "var(--ink-2)", "stroke-width": 2, "stroke-dasharray": "5 4", "stroke-linecap": "round" }));
+  /* 선 끝에 붙이면 막대 값 라벨과 겹친다 — 비어 있는 좌상단에 미니 범례로 둔다 */
+  svg.appendChild(el("line", { x1: M.l + 4, y1: M.t + 8, x2: M.l + 26, y2: M.t + 8, stroke: "var(--ink-2)", "stroke-width": 2, "stroke-dasharray": "5 4" }));
+  const lab = el("text", { x: M.l + 32, y: M.t + 12, class: "lbl" });
+  lab.textContent = "3주 이동평균"; svg.appendChild(lab);
+
+  svg.appendChild(el("line", { x1: M.l, y1: y(0), x2: W - M.r, y2: y(0), class: "axisline" }));
+
+  $("#legWeek").innerHTML = STACK.map(sk =>
+    `<span class="item"><i style="background:${sk === "WITHDRAW" ? "repeating-linear-gradient(45deg,var(--s-out),var(--s-out) 2px,transparent 2px,transparent 4px)" : OUT[sk].color}"></i>${
+      sk === "TEST_FAIL" ? "필기·검사 탈락" : sk === "WITHDRAW" ? "철회·취소·무응답" : sk === "OFFER" ? "최종합격" : OUT[sk].label}</span>`).join("");
+}
+
+/* ─────────────────── 2. 깔때기 ─────────────────── */
+function renderFunnel() {
+  const rows = filtered().filter(isCounted);
+  const stages = [
+    { n: "지원 제출",        c: rows.length },
+    { n: "서류 합격",        c: rows.filter(r => r.s >= 2).length },
+    { n: "필기·검사 통과",   c: rows.filter(r => r.s >= 3).length },
+    { n: "면접 응시",        c: rows.filter(r => r.s >= 4).length },
+    { n: "최종 합격",        c: rows.filter(r => r.s >= 5).length },
+  ];
+  const W = 480, rowH = 46, H = stages.length * rowH + 26;
+  const M = { l: 104, r: 92, t: 10 };
+  const iw = W - M.l - M.r;
+  const max = stages[0].c || 1;
+  const ramp = ["--ramp-1", "--ramp-2", "--ramp-3", "--ramp-4", "--ramp-5"];
+  const svg = $("#chFunnel");
+  svg.setAttribute("viewBox", `0 0 ${W} ${H}`); svg.setAttribute("width", "100%"); svg.setAttribute("height", H);
+  svg.innerHTML = "";
+  stages.forEach((s, i) => {
+    const yy = M.t + i * rowH;
+    const w = max ? (s.c / max) * iw : 0;
+    const lab = el("text", { x: M.l - 10, y: yy + 20, class: "lbl", "text-anchor": "end" }); lab.textContent = s.n; svg.appendChild(lab);
+    const rect = el("rect", { x: M.l, y: yy, width: Math.max(w, 2), height: 28, rx: 4, fill: `var(${ramp[i]})`, class: "mark" });
+    const prev = i ? stages[i - 1].c : null;
+    bindTip(rect, `<b>${s.n}</b><span class="m">${s.c}건${prev ? `, 직전 대비 ${fmtPct(s.c / (prev || 1))}` : ""}</span>`);
+    svg.appendChild(rect);
+    const v = el("text", { x: M.l + Math.max(w, 2) + 8, y: yy + 20, class: "val" }); v.textContent = s.c + "건"; svg.appendChild(v);
+    if (i) {
+      const p = el("text", { x: M.l + Math.max(w, 2) + 44, y: yy + 20, class: "tick tab" });
+      p.textContent = prev ? fmtPct(s.c / prev) : ""; svg.appendChild(p);
+    }
+  });
+}
+
+/* ─────────────────── 3. 사망 단계 ─────────────────── */
+/* 필기 탈락은 메모로 한 바구니에만 넣는다(NCS 우선) */
+const testKind = r => /NCS/.test(r.n || "") ? "NCS" : /코테/.test(r.n || "") ? "코테" : "기타";
+function renderDeath() {
+  const rows = filtered();
+  const buckets = [
+    { n: "서류", k: ["DOC_FAIL"], color: "var(--s-doc)" },
+    { n: "필기 NCS·전공", k: ["TEST_FAIL"], color: "var(--s-test)", filter: r => testKind(r) === "NCS" },
+    { n: "코테", k: ["TEST_FAIL"], color: "var(--s-test)", filter: r => testKind(r) === "코테" },
+    { n: "필기 기타", k: ["TEST_FAIL"], color: "var(--s-test)", filter: r => testKind(r) === "기타" },
+    { n: "인성검사", k: ["ASSESS_FAIL"], color: "var(--s-test)" },
+    { n: "면접", k: ["ITV_FAIL"], color: "var(--s-itv)" },
+    { n: "자진 철회·취소", k: ["WITHDRAW", "CANCEL"], color: "var(--s-out)", hatch: true },
+    { n: "무응답", k: ["NORESP"], color: "var(--s-out)", hatch: true },
+  ].map(b => {
+    let list = rows.filter(r => b.k.includes(r.o));
+    if (b.filter) list = list.filter(b.filter);
+    return { ...b, list };
+  }).filter(b => b.list.length);
+
+  const W = 480, rowH = 34, H = buckets.length * rowH + 20;
+  const M = { l: 118, r: 60, t: 8 };
+  const iw = W - M.l - M.r;
+  const max = Math.max(1, ...buckets.map(b => b.list.length));
+  const svg = $("#chDeath");
+  svg.setAttribute("viewBox", `0 0 ${W} ${H}`); svg.setAttribute("width", "100%"); svg.setAttribute("height", H);
+  svg.innerHTML = "";
+  const defs = el("defs");
+  const pat = el("pattern", { id: "hatch2", width: 6, height: 6, patternTransform: "rotate(45)", patternUnits: "userSpaceOnUse" });
+  pat.appendChild(el("rect", { width: 6, height: 6, fill: "var(--s-out)", "fill-opacity": 0.28 }));
+  pat.appendChild(el("line", { x1: 0, y1: 0, x2: 0, y2: 6, stroke: "var(--s-out)", "stroke-width": 2.4 }));
+  defs.appendChild(pat); svg.appendChild(defs);
+
+  buckets.forEach((b, i) => {
+    const yy = M.t + i * rowH;
+    const lab = el("text", { x: M.l - 10, y: yy + 17, class: "lbl", "text-anchor": "end" }); lab.textContent = b.n; svg.appendChild(lab);
+    const w = (b.list.length / max) * iw;
+    const rect = el("rect", { x: M.l, y: yy, width: Math.max(w, 2), height: 22, rx: 4, fill: b.hatch ? "url(#hatch2)" : b.color, class: "mark" });
+    bindTip(rect, `<b>${b.n} ${b.list.length}건</b><span class="m">${b.list.map(r => r.c).join(", ")}</span>`);
+    svg.appendChild(rect);
+    const v = el("text", { x: M.l + Math.max(w, 2) + 8, y: yy + 17, class: "val" }); v.textContent = b.list.length; svg.appendChild(v);
+  });
+}
+
+/* ─────────────────── 4. 월별 서류 통과율 ─────────────────── */
+function renderTrend() {
+  const rows = filtered().filter(isDecided);
+  const byMonth = {};
+  rows.forEach(r => { const m = r.d.slice(0, 7); (byMonth[m] ||= []).push(r); });
+  const months = Object.keys(byMonth).sort();
+  const overall = rows.length ? rows.filter(isDocPass).length / rows.length : 0;
+
+  const W = Math.max(520, months.length * 150), H = 250;
+  const M = { t: 20, r: 20, b: 48, l: 44 };
+  const iw = W - M.l - M.r, ih = H - M.t - M.b;
+  const y = v => M.t + ih - v * ih;
+  const svg = $("#chTrend");
+  svg.setAttribute("viewBox", `0 0 ${W} ${H}`); svg.setAttribute("width", W); svg.setAttribute("height", H);
+  svg.innerHTML = "";
+  [0, .25, .5, .75, 1].forEach(v => {
+    svg.appendChild(el("line", { x1: M.l, y1: y(v), x2: W - M.r, y2: y(v), class: "gridline" }));
+    const t = el("text", { x: M.l - 8, y: y(v) + 4, class: "tick tab", "text-anchor": "end" }); t.textContent = fmtPct(v); svg.appendChild(t);
+  });
+
+  const bw = Math.max(6, Math.min(76, iw / months.length - 40));
+  const pts = [];
+  months.forEach((m, i) => {
+    const list = byMonth[m], pass = list.filter(isDocPass).length, rate = pass / list.length;
+    const cx = M.l + (i + 0.5) * (iw / months.length);
+    const rect = el("rect", { x: cx - bw / 2, y: y(rate), width: bw, height: Math.max(ih - (ih - rate * ih), 2), rx: 4, fill: "var(--s-live)", class: "mark", "fill-opacity": list.length < 5 ? 0.45 : 1 });
+    rect.setAttribute("height", Math.max(rate * ih, 2));
+    bindTip(rect, `<b>${m} 제출분</b><span class="m">서류 통과 ${pass} / 결정 ${list.length}건 = ${fmtPct(rate)}</span>${list.length < 5 ? '<br><span class="m">⚠ n&lt;5 — 참고용</span>' : ""}`);
+    svg.appendChild(rect);
+    const v = el("text", { x: cx, y: y(rate) - 8, class: "val", "text-anchor": "middle" }); v.textContent = fmtPct(rate); svg.appendChild(v);
+    const t = el("text", { x: cx, y: H - 26, class: "tick", "text-anchor": "middle" }); t.textContent = `${m.slice(5)}월 (n=${list.length})`; svg.appendChild(t);
+    pts.push([cx, y(rate)]);
+  });
+
+  svg.appendChild(el("line", { x1: M.l, y1: y(overall), x2: W - M.r, y2: y(overall), stroke: "var(--muted)", "stroke-width": 1.5, "stroke-dasharray": "4 4" }));
+  const ot = el("text", { x: W - M.r, y: y(overall) - 7, class: "lbl", "text-anchor": "end" });
+  ot.textContent = `전체 평균 ${fmtPct(overall)}`; svg.appendChild(ot);
+  svg.appendChild(el("line", { x1: M.l, y1: y(0), x2: W - M.r, y2: y(0), class: "axisline" }));
+}
+
+/* ─────────────────── 5. 세그먼트별 통과율 ─────────────────── */
+function renderSeg() {
+  const rows = filtered().filter(isDecided);
+  const groups = [["기관유형", "t"], ["고용형태", "e"], ["직무축", "j"]];
+  const lines = [];
+  groups.forEach(([title, key]) => {
+    lines.push({ header: title });
+    const vals = [...new Set(rows.map(r => r[key]))];
+    vals.map(v => {
+      const list = rows.filter(r => r[key] === v);
+      return { name: v, n: list.length, pass: list.filter(isDocPass).length, list };
+    }).sort((a, b) => b.pass / b.n - a.pass / a.n || b.n - a.n).forEach(x => lines.push(x));
+  });
+
+  const rowH = 28, headH = 30;
+  const H = lines.reduce((a, l) => a + (l.header ? headH : rowH), 0) + 16;
+  const W = 660, M = { l: 132, r: 96, t: 6 };
+  const iw = W - M.l - M.r;
+  const svg = $("#chSeg");
+  svg.setAttribute("viewBox", `0 0 ${W} ${H}`); svg.setAttribute("width", "100%"); svg.setAttribute("height", H);
+  svg.innerHTML = "";
+  let yy = M.t;
+  lines.forEach(l => {
+    if (l.header) {
+      const t = el("text", { x: 0, y: yy + 20, class: "val" }); t.textContent = l.header; svg.appendChild(t);
+      yy += headH; return;
+    }
+    const rate = l.n ? l.pass / l.n : 0;
+    const lab = el("text", { x: M.l - 10, y: yy + 15, class: "lbl", "text-anchor": "end" }); lab.textContent = l.name; svg.appendChild(lab);
+    svg.appendChild(el("line", { x1: M.l, y1: yy + 10, x2: M.l + iw, y2: yy + 10, stroke: "var(--grid)", "stroke-width": 8, "stroke-linecap": "round" }));
+    const w = Math.max(rate * iw, 3);
+    const bar = el("rect", { x: M.l, y: yy + 4, width: w, height: 13, rx: 4, fill: "var(--s-live)", class: "mark", "fill-opacity": l.n < 5 ? 0.4 : 1 });
+    bindTip(bar, `<b>${l.name} — ${fmtPct(rate)}</b><span class="m">서류 통과 ${l.pass} / 결정 ${l.n}건</span>${l.n < 5 ? '<br><span class="m">⚠ n&lt;5 — 참고용</span>' : ""}<br><span class="m">${l.list.filter(isDocPass).map(r => r.c).join(", ") || "통과 없음"}</span>`);
+    svg.appendChild(bar);
+    const v = el("text", { x: M.l + iw + 10, y: yy + 15, class: "val tab" }); v.textContent = fmtPct(rate); svg.appendChild(v);
+    const nn = el("text", { x: M.l + iw + 52, y: yy + 15, class: "tick tab" }); nn.textContent = `${l.pass}/${l.n}`; svg.appendChild(nn);
+    yy += rowH;
+  });
+}
+
+/* ─────────────────── 6. 리드타임 ─────────────────── */
+function renderLead() {
+  const rows = filtered().filter(r => r.rd && !r.est).map(r => ({ ...r, lt: daysBetween(r.d, r.rd) })).filter(r => r.lt >= 0);
+  const W = Math.max(680, 700), H = 200;
+  const M = { t: 22, r: 24, b: 44, l: 40 };
+  const iw = W - M.l - M.r, ih = H - M.t - M.b;
+  const max = Math.max(35, ...rows.map(r => r.lt));
+  const x = v => M.l + (v / max) * iw;
+  const svg = $("#chLead");
+  svg.setAttribute("viewBox", `0 0 ${W} ${H}`); svg.setAttribute("width", "100%"); svg.setAttribute("height", H);
+  svg.innerHTML = "";
+  for (let v = 0; v <= max; v += 10) {
+    svg.appendChild(el("line", { x1: x(v), y1: M.t, x2: x(v), y2: M.t + ih, class: "gridline" }));
+    const t = el("text", { x: x(v), y: H - 22, class: "tick tab", "text-anchor": "middle" }); t.textContent = v + "일"; svg.appendChild(t);
+  }
+  /* 같은 값이 겹치면 위로 쌓는다 */
+  const seen = {};
+  rows.forEach(r => {
+    const k = r.lt; seen[k] = (seen[k] || 0) + 1;
+    const cy = M.t + ih - 12 - (seen[k] - 1) * 13;
+    const sk = stackKey(r);
+    const c = el("circle", { cx: x(r.lt), cy, r: 5.5, fill: sk === "WITHDRAW" ? "var(--s-out)" : OUT[sk].color, class: "mark" });
+    bindTip(c, `<b>${escapeHTML(r.c)}</b><span class="m">${r.d}${r.est ? "(추정)" : ""} → ${r.rd}, ${r.lt}일</span><br><span class="m">${OUT[r.o].label}</span>`);
+    svg.appendChild(c);
+  });
+  const med = rows.length ? [...rows].sort((a, b) => a.lt - b.lt)[Math.floor(rows.length / 2)].lt : 0;
+  svg.appendChild(el("line", { x1: x(med), y1: M.t - 4, x2: x(med), y2: M.t + ih, stroke: "var(--ink-2)", "stroke-width": 2, "stroke-dasharray": "5 4" }));
+  const t = el("text", { x: x(med) + 8, y: M.t + 6, class: "lbl" }); t.textContent = `중앙값 ${med}일`; svg.appendChild(t);
+  svg.appendChild(el("line", { x1: M.l, y1: M.t + ih, x2: W - M.r, y2: M.t + ih, class: "axisline" }));
+}
+
+/* ─────────────────── 7. 원인·결과 해석 ─────────────────── */
+function renderRuleBasedFindings() {
+  const all = RECORDS.filter(isCounted);
+  const decided = all.filter(isDecided);
+  const seg = (key, val, rows = decided) => {
+    const d = rows.filter(r => r[key] === val);
+    return { n: d.length, p: d.filter(isDocPass).length, r: d.length ? d.filter(isDocPass).length / d.length : 0 };
+  };
+  const ranked = key => {
+    const rows = [...new Set(decided.map(r => r[key]))]
+      .map(name => ({ name, ...seg(key, name) }))
+      .filter(x => x.n > 0)
+      .sort((a, b) => b.r - a.r || b.n - a.n);
+    const reliable = rows.filter(x => x.n >= 8);
+    return reliable.length >= 2 ? reliable : rows;
+  };
+  const list = rows => rows.length ? rows.map(r => r.c).join(", ") : "해당 없음";
+  const pct = (part, total) => total ? fmtPct(part / total) : "—";
+
+  const typeRank = ranked("t");
+  const bestType = typeRank[0], lowType = typeRank[typeRank.length - 1];
+  const afterDoc = all.filter(r => r.s >= 2);
+  const diedAfter = afterDoc.filter(r => ["TEST_FAIL", "ASSESS_FAIL", "ITV_FAIL"].includes(r.o));
+  const deathCounts = ["TEST_FAIL", "ASSESS_FAIL", "ITV_FAIL"]
+    .map(code => ({ code, rows: diedAfter.filter(r => r.o === code) }))
+    .sort((a, b) => b.rows.length - a.rows.length);
+  const mainDeath = deathCounts[0];
+
+  const months = [...new Set(decided.map(r => r.d.slice(0, 7)))].sort();
+  const latestMonth = months.at(-1);
+  const previousMonth = months.at(-2);
+  const monthStat = month => {
+    const rows = decided.filter(r => r.d.startsWith(month || "\0"));
+    const passed = rows.filter(isDocPass).length;
+    return { month, rows, passed, rate: rows.length ? passed / rows.length : 0 };
+  };
+  const latest = monthStat(latestMonth);
+  const previous = monthStat(previousMonth);
+  const latestPending = all.filter(r => latestMonth && r.d.startsWith(latestMonth) && r.o === "PENDING").length;
+
+  const choiceClosed = afterDoc.filter(r => ["WITHDRAW", "CANCEL", "OFFER_DECLINED"].includes(r.o));
+  const choiceTypes = [...new Set(choiceClosed.map(r => r.e))]
+    .map(name => ({ name, n: choiceClosed.filter(r => r.e === name).length }))
+    .sort((a, b) => b.n - a.n);
+
+  const jobRank = ranked("j");
+  const bestJob = jobRank[0], lowJob = jobRank[jobRank.length - 1];
+  const lowJobFails = all.filter(r => lowJob && r.j === lowJob.name && r.o === "DOC_FAIL");
+
+  const lts = all.filter(r => r.rd && !r.est).map(r => daysBetween(r.d, r.rd)).filter(v => v >= 0).sort((a, b) => a - b);
+  const med = lts.length ? lts[Math.floor(lts.length / 2)] : 0;
+  const p90 = lts.length ? lts[Math.min(lts.length - 1, Math.floor(lts.length * 0.9))] : 0;
+  const now = new Date();
+  const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
+  const overdue = all.filter(r => r.o === "PENDING" && r.s < 2 && !r.est && daysBetween(r.d, today) >= p90);
+
+  const cards = [
+    {
+      tag: "관측, 구조",
+      h: `${bestType?.name || "기관유형"}의 서류 통과율이 가장 높다`,
+      p: [`결과가 나온 건 중 표본 8건 이상 묶음을 비교하면 <b>${bestType?.name || "—"} ${bestType?.p || 0}/${bestType?.n || 0} = ${bestType ? fmtPct(bestType.r) : "—"}</b>, <b>${lowType?.name || "—"} ${lowType?.p || 0}/${lowType?.n || 0} = ${lowType ? fmtPct(lowType.r) : "—"}</b>다.`,
+          `기관유형별 격차는 지원처 구성을 다시 볼 신호다. 다만 이 수치만으로 학점·전공·자소서 같은 <b>개별 탈락 원인을 단정할 수는 없다</b>.`]
+    },
+    {
+      tag: "결과, 병목 이동",
+      h: `서류 다음 최대 이탈 지점은 ${mainDeath?.rows.length ? OUT[mainDeath.code].label : "아직 없음"}`,
+      p: [`서류 이상에 도달한 <b>${afterDoc.length}건</b> 중 후속 전형 탈락은 <b>${diedAfter.length}건</b>. ${mainDeath?.rows.length ? `<b>${OUT[mainDeath.code].label} ${mainDeath.rows.length}건</b>으로 가장 많다.` : "아직 후속 전형 탈락 기록이 없다."}`,
+          `${mainDeath?.rows.length ? `<b>${list(mainDeath.rows)}</b>` : "다음 결과가 쌓이면"}을 기준으로 가장 큰 병목에 준비 시간을 우선 배분할 수 있다.`]
+    },
+    {
+      tag: "관측, 볼륨",
+      h: `${latestMonth || "최근 월"} 서류 통과율은 ${previous.rate <= latest.rate ? "상승" : "하락"}했다`,
+      p: [`${previousMonth || "이전 월"} 제출분은 <b>${pct(previous.passed, previous.rows.length)}</b>(n=${previous.rows.length}), ${latestMonth || "최근 월"} 제출분은 <b>${pct(latest.passed, latest.rows.length)}</b>(n=${latest.rows.length}).`,
+          `최근 월 제출분 가운데 아직 결과 대기가 <b>${latestPending}건</b>이라 통과율은 계속 변한다. 표본 수와 미결정 건을 함께 보고 해석해야 한다.`]
+    },
+    {
+      tag: "결과, 선택 비용",
+      h: `서류 이상 도달 건의 ${pct(choiceClosed.length, afterDoc.length)}를 선택 종료했다`,
+      p: [`서류 이상 도달 ${afterDoc.length}건 중 <b>${choiceClosed.length}건</b>이 철회·취소·합격 후 고사다. ${list(choiceClosed)}.`,
+          `선택 종료의 고용형태는 ${choiceTypes.length ? choiceTypes.map(x => `<b>${x.name} ${x.n}건</b>`).join(", ") : "해당 없음"}이다. 지원 전 고용형태와 커리어 정합성을 확인하면 후속 전형의 매몰비용을 줄일 수 있다.`]
+    },
+    {
+      tag: "관측, 직무 정렬",
+      h: `${lowJob?.name || "직무축"}의 서류 회수율이 가장 낮다`,
+      p: [jobRank.map(x => `${x.name} <b>${x.p}/${x.n} = ${fmtPct(x.r)}</b>`).join(", ") + ".",
+          `${lowJob?.name || "최저 직무축"} 서류 탈락: <b>${list(lowJobFails)}</b>. ${bestJob && lowJob ? `${bestJob.name} 대비 격차는 ${Math.round((bestJob.r - lowJob.r) * 100)}%p다.` : ""}`]
+    },
+    {
+      tag: "결과, 운영",
+      h: "결과를 기다리는 시간이 곧 재고 비용",
+      p: [`제출 → 결과 통보 <b>중앙값 ${med}일</b>, 상위 10%는 <b>${p90}일</b>. 현재 그 선을 넘긴 진행중 건은 <b>${overdue.length}건</b>이다.`,
+          `${list(overdue)}. <b>${p90}일 경과</b>를 재확인 기준으로 쓰면 오래된 무응답 때문에 진행중 숫자가 부풀어 보이는 것을 막을 수 있다.`]
+    },
+  ];
+  $("#findings").innerHTML = cards.map(c =>
+    `<div class="finding"><span class="tag">${c.tag}</span><h3>${c.h}</h3>${c.p.map(p => `<p>${p}</p>`).join("")}</div>`).join("");
+}
+
+function escapeHTML(value) {
+  return String(value ?? "").replace(/[&<>"']/g, ch => ({
+    "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;",
+  })[ch]);
+}
+
+/* ─────────────────── 8. 테이블 ─────────────────── */
+const COLS = [
+  { k: "c", n: "회사·기관" }, { k: "t", n: "유형" }, { k: "e", n: "고용형태" }, { k: "j", n: "직무축" },
+  { k: "d", n: "제출일" }, { k: "rd", n: "결과일" }, { k: "lt", n: "소요일", num: true },
+  { k: "sLabel", n: "최고 단계" }, { k: "oLabel", n: "결과" },
+];
+const STAGE_LABEL = { 1: "1 서류", 2: "2 서류합격", 3: "3 필기통과", 4: "4 면접", 5: "5 최종합격" };
+let sortKey = "d", sortDir = -1;
+const TBL = { q: "", o: "all" };
+const O_GROUP = {
+  live: r => r.o === "PENDING",
+  pass: r => r.s >= 2,
+  dead: r => OUT[r.o].group === "dead",
+  out: r => OUT[r.o].group === "out",
+};
+function renderTable() {
+  const q = TBL.q.trim().toLowerCase();
+  const rows = filtered()
+    .filter(r => TBL.o === "all" || O_GROUP[TBL.o](r))
+    .filter(r => !q || [r.c, r.t, r.e, r.j, r.n].join(" ").toLowerCase().includes(q))
+    .map(r => ({
+    ...r,
+    lt: r.rd && !r.est ? daysBetween(r.d, r.rd) : null,
+    sLabel: STAGE_LABEL[r.s],
+    oLabel: OUT[r.o].label,
+  })).sort((a, b) => {
+    const x = a[sortKey], y = b[sortKey];
+    if (x === y) return 0;
+    if (x === null || x === undefined) return 1;
+    if (y === null || y === undefined) return -1;
+    return (x > y ? 1 : -1) * sortDir;
+  });
+  const thead = $("#tbl").querySelector("thead");
+  thead.innerHTML = `<tr>${COLS.map(c => `<th data-k="${c.k}"${sortKey === c.k ? ` aria-sort="${sortDir > 0 ? "ascending" : "descending"}"` : ""}>${c.n}</th>`).join("")}</tr>`;
+  thead.querySelectorAll("th").forEach(th => th.onclick = () => {
+    const k = th.dataset.k;
+    if (sortKey === k) sortDir *= -1; else { sortKey = k; sortDir = 1; }
+    renderTable();
+  });
+  $("#tbl").querySelector("tbody").innerHTML = rows.map(r => `<tr>
+    <td class="co"><span class="dot" style="background:${OUT[r.o].color}"></span>${escapeHTML(r.c)}${r.n ? `<div class="memo" title="${escapeHTML(r.n)}">${escapeHTML(r.n)}</div>` : ""}</td>
+    <td>${escapeHTML(r.t)}</td><td>${escapeHTML(r.e)}</td><td>${escapeHTML(r.j)}</td>
+    <td class="num">${r.est ? "~" : ""}${r.d}</td>
+    <td class="num">${r.rd || "—"}</td>
+    <td class="num">${r.lt ?? "—"}</td>
+    <td>${r.sLabel}</td><td>${r.oLabel}</td></tr>`).join("");
+  $("#fCount").textContent = `표시 ${filtered().length}건 / 전체 ${RECORDS.length}건`;
+  $("#tCount").textContent = `${rows.length}건`;
+  $("#estNote").textContent = `~ 표시 = 제출일 추정 (${RECORDS.filter(r => r.est).length}건).`;
+  $("#estFooter").textContent = RECORDS.filter(r => r.est).length;
+}
+
+/* ═══════════════ 브리핑 ═══════════════ */
+const SCHED = LOADED.schedule;
+const REFRESH_BEFORE_KEY = "jobdash.refresh.before.v1";
+const REFRESH_RECENT_KEY = "jobdash.refresh.recent.v1";
+
+function dashboardSnapshot() {
+  return {
+    records: RECORDS.map(r => ({ c: r.c, d: r.d, j: r.j, e: r.e, o: r.o, s: r.s })),
+    schedule: SCHED.map(i => ({ company: i.company, event: i.event, kind: i.kind, date: i.date, time: i.time })),
+  };
+}
+
+function storeRefreshSnapshot() {
+  try { localStorage.setItem(REFRESH_BEFORE_KEY, JSON.stringify(dashboardSnapshot())); } catch (_) {}
+}
+
+function refreshDiff(before, after) {
+  const changes = [];
+  const recordKey = r => [r.c, r.d, r.j, r.e].join("|");
+  const oldRecords = new Map((before.records || []).map(r => [recordKey(r), r]));
+  const newRecords = new Map((after.records || []).map(r => [recordKey(r), r]));
+  newRecords.forEach((now, key) => {
+    const old = oldRecords.get(key);
+    if (!old) changes.push(`${now.c}: 지원건 추가`);
+    else if (old.o !== now.o || old.s !== now.s) {
+      const beforeLabel = OUT[old.o]?.label || old.o;
+      const afterLabel = OUT[now.o]?.label || now.o;
+      changes.push(`${now.c}: ${beforeLabel} → ${afterLabel}`);
+    }
+  });
+  oldRecords.forEach((old, key) => {
+    if (!newRecords.has(key)) changes.push(`${old.c}: 지원건 제외`);
+  });
+
+  const scheduleKey = i => [i.company, i.kind, i.event].join("|");
+  const oldSchedule = new Map((before.schedule || []).map(i => [scheduleKey(i), i]));
+  const newSchedule = new Map((after.schedule || []).map(i => [scheduleKey(i), i]));
+  newSchedule.forEach((now, key) => {
+    const old = oldSchedule.get(key);
+    const when = [now.date, now.time].filter(Boolean).join(" ");
+    if (!old) changes.push(`${now.company}: ${now.event} 일정 추가${when ? ` (${when})` : ""}`);
+    else if (old.date !== now.date || old.time !== now.time) {
+      const previous = [old.date, old.time].filter(Boolean).join(" ") || "미정";
+      changes.push(`${now.company}: ${now.event} ${previous} → ${when || "미정"}`);
+    }
+  });
+  oldSchedule.forEach((old, key) => {
+    if (!newSchedule.has(key)) changes.push(`${old.company}: ${old.event} 일정 제외`);
+  });
+  return changes;
+}
+
+function renderRecentChanges() {
+  let recent = null;
+  try {
+    const beforeRaw = localStorage.getItem(REFRESH_BEFORE_KEY);
+    if (beforeRaw) {
+      const changes = refreshDiff(JSON.parse(beforeRaw), dashboardSnapshot());
+      const now = new Date();
+      recent = { at: `${ymd(now)} ${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`, changes };
+      localStorage.setItem(REFRESH_RECENT_KEY, JSON.stringify(recent));
+      localStorage.removeItem(REFRESH_BEFORE_KEY);
+    } else {
+      recent = JSON.parse(localStorage.getItem(REFRESH_RECENT_KEY) || "null");
+    }
+  } catch (_) { recent = null; }
+  const card = $("#recentChangesCard");
+  if (!recent) { card.hidden = true; return; }
+  const rows = recent.changes || [];
+  card.hidden = false;
+  $("#recentChangesMeta").textContent = `${String(recent.at || "").replace("T", " ").slice(0, 16)} 기준, ${rows.length ? `변화 ${rows.length}건` : "지원 상태·일정 변화 없음"}`;
+  $("#recentChanges").innerHTML = rows.length
+    ? rows.slice(0, 8).map(x => `<li>${escapeHTML(x)}</li>`).join("")
+    : `<li class="empty">지난 갱신 이후 새로 달라진 지원 상태나 일정이 없다.</li>`;
+}
+
+/* 체류일수 — 진행중이면 오늘까지, 끝났으면 결과일까지 */
+const ageOf = r => r.d ? daysBetween(r.d, r.rd || TODAY) : null;
+
+/* 정확한 제출일·결과일 쌍만 리드타임에 쓴다. 역산 추정일은 순환 계산이 되므로 제외한다. */
+const LEADS = RECORDS.filter(r => r.d && r.rd && !r.est && daysBetween(r.d, r.rd) >= 0)
+  .map(r => daysBetween(r.d, r.rd)).sort((a, b) => a - b);
+const pctl = p => LEADS.length ? LEADS[Math.min(LEADS.length - 1, Math.floor(LEADS.length * p))] : 0;
+const P75 = pctl(0.75), P50 = pctl(0.5);
+
+/* 적중배수 = 이 세그먼트의 서류 통과율 ÷ 전체 서류 통과율 */
+function hitRatios() {
+  const decided = RECORDS.filter(isCounted).filter(isDecided);
+  const base = decided.length ? decided.filter(isDocPass).length / decided.length : 0;
+  const rows = [];
+  [["t", "기관"], ["e", "고용"], ["j", "직무"]].forEach(([key, tag]) => {
+    [...new Set(RECORDS.filter(isCounted).map(r => r[key]))].forEach(name => {
+      const grp = decided.filter(r => r[key] === name);
+      const all = RECORDS.filter(isCounted).filter(r => r[key] === name);
+      const rate = grp.length ? grp.filter(isDocPass).length / grp.length : 0;
+      rows.push({ tag, name, n: grp.length, pass: grp.filter(isDocPass).length,
+                  pending: all.filter(r => r.o === "PENDING").length, total: all.length,
+                  rate, mult: base ? rate / base : 0 });
+    });
+  });
+  return { rows: rows.sort((a, b) => b.mult - a.mult), base };
+}
+
+/* 단계 전환율 — KPI와 같은 분모 규칙: 그 관문의 결과가 실제로 나온 건만.
+   (통과했거나, 그 관문에서 탈락했거나. 관문 앞에서 대기 중이거나 철회한 건은 분모에서 뺀다) */
+function transitions() {
+  /* 철회 건도 통과한 관문까지는 실력 증거다 — s(최고 도달 단계)가 그걸 보증한다.
+     철회한 그다음 관문부터는 결과 코드가 탈락이 아니므로 자연히 분모에서 빠진다. */
+  const pool = RECORDS.filter(isCounted);
+  const gate = (next, failCodes) => {
+    const passed = pool.filter(r => r.s >= next).length;
+    const failed = pool.filter(r => r.s === next - 1 && failCodes.includes(r.o)).length;
+    return { num: passed, den: passed + failed };
+  };
+  const steps = [
+    { from: "제출", to: "서류 합격", ...gate(2, ["DOC_FAIL"]), dead: "서류 탈락" },
+    { from: "서류 합격", to: "필기·검사 통과", ...gate(3, ["TEST_FAIL", "ASSESS_FAIL"]), dead: "필기·인성검사 탈락" },
+    { from: "면접", to: "최종 합격", ...gate(5, ["ITV_FAIL"]), dead: "면접 탈락" },
+  ].filter(s => s.den > 0);
+  steps.forEach(s => s.rate = s.num / s.den);
+  return steps;
+}
+
+function renderDday() {
+  const list = $("#ddayList");
+  if (!SCHED.length) {
+    list.innerHTML = `<li><span class="cd">—</span><span class="co">예정된 일정이 없다<div class="ev">CSV의 다음일정일 열에 오늘 이후 날짜가 없다.</div></span></li>`;
+    $("#ddayLead").textContent = "";
+    return;
+  }
+  const shown = SCHED.slice(0, 7);
+  list.innerHTML = shown.map(i => {
+    const dd = i.dday === null ? "미정" : i.dday === 0 ? "오늘" : i.dday === 1 ? "내일" : `D-${i.dday}`;
+    const soon = i.dday !== null && i.dday <= 3;
+    return `<li class="${soon ? "soon" : ""}"><span class="cd">${dd}</span><span class="co">${escapeHTML(i.company)}`
+      + `<div class="ev"><span class="kd ${escapeHTML(i.kind)}">${escapeHTML(i.kind)}</span>`
+      + `${escapeHTML(i.event)}${i.time ? ", " + escapeHTML(i.time) : ""}`
+      + `${i.date ? ", " + i.date.slice(5).replace("-", "/") : ""}</div></span></li>`;
+  }).join("");
+  const next = SCHED.find(i => i.dday !== null);
+  $("#ddayLead").textContent = SCHED.length > shown.length ? `이후 ${SCHED.length - shown.length}건 더 있다.` : "";
+  return next;
+}
+
+/* 발표 시기 판단용 분위수 */
+const P25 = pctl(0.25), P90 = pctl(0.9);
+const ymd = x => `${x.getFullYear()}-${String(x.getMonth() + 1).padStart(2, "0")}-${String(x.getDate()).padStart(2, "0")}`;
+const addDays = (s, n) => { const d = day(s); d.setDate(d.getDate() + n); return ymd(d); };
+/* 월요일 시작 주 */
+const mondayOf = s => { const x = day(s); x.setDate(x.getDate() - (x.getDay() + 6) % 7); return ymd(x); };
+const STAGE_NAME = { 1: "서류 대기", 2: "서류 합격", 3: "필기 통과", 4: "면접 응시", 5: "최종 합격" };
+const median = a => { const b = [...a].sort((x, y) => x - y); return b.length ? b[Math.floor(b.length / 2)] : null; };
+const DOCFAIL_MED = median(RECORDS.filter(r => r.o === "DOC_FAIL" && r.d && r.rd && !r.est).map(r => daysBetween(r.d, r.rd)));
+
+/* 메모에서 가장 최근 진행 내용(마지막 → 뒤)을 꺼낸다 */
+function latestStep(r) {
+  const parts = String(r.n || "").split("→").map(x => x.trim()).filter(Boolean);
+  return parts.length > 1 ? parts.at(-1) : "";
+}
+
+function pipeline() {
+  const live = RECORDS.filter(r => r.o === "PENDING");
+  const moving = live.filter(r => r.s >= 2);
+  const rest = live.filter(r => r.s < 2);
+  const uncertain = rest.filter(r => r.est || ageOf(r) === null);
+  const dated = rest.filter(r => !uncertain.includes(r));
+  /* 정확한 결과 기록이 적으면 발표 시기 구간을 만들 수 없어 전부 이른 편으로 둔다 */
+  if (LEADS.length < 5) return { live, moving, dated, early: dated, due: [], late: [], silent: [], uncertain, noBase: true };
+  const early = dated.filter(r => ageOf(r) < P25);
+  const due = dated.filter(r => ageOf(r) >= P25 && ageOf(r) <= P75);
+  const late = dated.filter(r => ageOf(r) > P75 && ageOf(r) <= P90);
+  const silent = dated.filter(r => ageOf(r) > P90);
+  return { live, moving, dated, early, due, late, silent, uncertain };
+}
+
+function weekCounts(n) {
+  const thisMon = mondayOf(TODAY);
+  const weeks = [];
+  for (let i = n - 1; i >= 0; i--) weeks.push(addDays(thisMon, -7 * i));
+  const cnt = Object.fromEntries(weeks.map(w => [w, 0]));
+  RECORDS.forEach(r => { if (r.d) { const w = mondayOf(r.d); if (w in cnt) cnt[w]++; } });
+  return weeks.map(w => ({ w, n: cnt[w] }));
+}
+
+function renderAlive() {
+  const rows = RECORDS.filter(r => r.o === "PENDING" && r.s >= 2)
+    .sort((a, b) => b.s - a.s || String(a.d).localeCompare(String(b.d)));
+  const passed = RECORDS.filter(isCounted).filter(isDocPass).length;
+  $("#aliveDesc").textContent = `지금까지 서류 통과 ${passed}건 중 아직 진행 중인 것.`;
+  $("#alive").innerHTML = rows.length
+    ? `<ul class="rowlist">${rows.map(r => `<li>`
+        + `<div class="rl-top"><b>${escapeHTML(r.c)}</b><span class="pill">${STAGE_NAME[r.s]}</span></div>`
+        + `<div class="rl-sub">${escapeHTML(latestStep(r) || `${r.j}, ${r.e}`)}</div>`
+        + `<div class="rl-meta">제출 후 ${ageOf(r)}일</div></li>`).join("")}</ul>`
+    : `<p class="empty-note">서류를 넘어 진행 중인 지원이 없다.</p>`;
+  return rows;
+}
+
+function renderRecentResults() {
+  const from = addDays(TODAY, -13);
+  const rows = RECORDS.filter(r => r.rd && r.rd >= from && r.rd <= TODAY && r.o !== "PENDING")
+    .sort((a, b) => b.rd.localeCompare(a.rd));
+  const good = rows.filter(r => r.s >= 2).length;
+  $("#recentDesc").textContent = rows.length
+    ? `결과일이 기록된 ${rows.length}건, 이 중 서류 이상 통과 ${good}건.`
+    : "결과일이 기록된 것만 센다.";
+  const shown = rows.slice(0, 6);
+  $("#recentResults").innerHTML = rows.length
+    ? `<ul class="rowlist compact">${shown.map(r => `<li>`
+        + `<div class="rl-top"><span class="dot" style="background:${OUT[r.o].color}"></span><b>${escapeHTML(r.c)}</b>`
+        + `<span class="rl-date">${r.rd.slice(5).replace("-", "/")}</span></div>`
+        + `<div class="rl-sub">${OUT[r.o].label}${r.s >= 2 ? `, ${STAGE_NAME[r.s]}까지` : ""}</div></li>`).join("")}</ul>`
+      + (rows.length > shown.length ? `<p class="note-inline">외 ${rows.length - shown.length}건은 내역 탭에서.</p>` : "")
+    : `<p class="empty-note">최근 2주 안에 기록된 결과가 없다.</p>`;
+  return rows;
+}
+
+/* 결과 대기: 제출 후 지난 날짜 위에 점을 찍고, 과거 결과가 주로 나온 구간을 깐다 */
+function renderWait(pipe) {
+  const svg = $("#chWait");
+  const rows = pipe.dated;
+  const W = Math.max(svg.parentElement.clientWidth || 900, 640);
+  const cap = Math.max(P90 + 14, 56);
+  const M = { l: 14, r: 40, t: 26, b: 30 };
+  const iw = W - M.l - M.r;
+  const x = d => M.l + Math.min(d, cap) / cap * iw;
+  /* 같은 날짜는 위로 쌓는다 */
+  const stack = {};
+  const pts = rows.map(r => { const a = Math.min(ageOf(r), cap); stack[a] = (stack[a] || 0) + 1; return { r, a, k: stack[a] - 1 }; });
+  const maxStack = Math.max(1, ...Object.values(stack));
+  const step = 11;
+  const H = M.t + maxStack * step + 14 + M.b;
+  const base = H - M.b - 8;
+  svg.setAttribute("width", W); svg.setAttribute("height", H); svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+  svg.innerHTML = "";
+  if (!pipe.noBase) {
+  svg.appendChild(el("rect", { x: x(P25), y: M.t - 8, width: x(P75) - x(P25), height: base - M.t + 16, rx: 6, fill: "var(--brand-soft)" }));
+  const lab = (xx, text, anchor = "middle", cls = "tick") => { const t = el("text", { x: xx, y: M.t - 12, class: cls, "text-anchor": anchor }); t.textContent = text; svg.appendChild(t); };
+  lab((x(P25) + x(P75)) / 2, `결과가 주로 나온 구간 ${P25}∼${P75}일`, "middle", "lbl");
+  svg.appendChild(el("line", { x1: x(P90), y1: M.t - 6, x2: x(P90), y2: base + 8, stroke: "var(--axis)", "stroke-width": 1.5, "stroke-dasharray": "4 4" }));
+  const t90 = el("text", { x: x(P90) + 6, y: M.t + 4, class: "tick" }); t90.textContent = `${P90}일`; svg.appendChild(t90);
+  }
+  svg.appendChild(el("line", { x1: M.l, y1: base + 8, x2: M.l + iw, y2: base + 8, stroke: "var(--axis)" }));
+  for (let v = 0; v <= cap; v += 7) {
+    const t = el("text", { x: x(v), y: H - 10, class: "tick tab", "text-anchor": "middle" });
+    t.textContent = v === 0 ? "제출" : v >= cap ? `${v}일+` : `${v}일`; svg.appendChild(t);
+  }
+  pts.forEach(({ r, a, k }) => {
+    const color = pipe.noBase ? "var(--brand)" : a < P25 ? "var(--ramp-2)" : a <= P75 ? "var(--brand)" : a <= P90 ? "var(--muted)" : "var(--axis)";
+    const c = el("circle", { cx: x(a), cy: base - k * step, r: 4.6, fill: color, class: "mark" });
+    bindTip(c, `<b>${escapeHTML(r.c)}</b><span class="m">${r.d} 제출, ${ageOf(r)}일째</span><br><span class="m">${escapeHTML(r.t)}, ${escapeHTML(r.e)}, ${escapeHTML(r.j)}</span>`);
+    svg.appendChild(c);
+  });
+
+  $("#waitDesc").innerHTML = `서류 결과를 기다리는 <b>${pipe.dated.length}건</b>. 점 하나가 지원 1건이고, 파란 띠는 지난 결과 ${LEADS.length}건 중 가운데 절반이 나온 시기다.`
+    + (pipe.uncertain.length ? ` 제출일을 모르는 ${pipe.uncertain.length}건은 뺐다.` : "");
+  if (pipe.noBase) {
+    $("#waitDesc").innerHTML = `서류 결과를 기다리는 <b>${pipe.dated.length}건</b>. 제출일과 결과일이 모두 정확한 결과가 5건 이상 쌓이면 평소 발표 시기를 계산해 나눠 보여 준다.`;
+    $("#waitGroups").innerHTML = "";
+    return;
+  }
+  const names = (rs, n) => rs.slice().sort((a, b) => ageOf(b) - ageOf(a)).slice(0, n)
+    .map(r => `${escapeHTML(r.c)} <span class="age">${ageOf(r)}일</span>`).join(", ") + (rs.length > n ? `, 외 ${rs.length - n}` : "");
+  const groups = [
+    { cls: "due", n: pipe.due.length, t: "지금 발표 시기", q: `제출 후 ${P25}∼${P75}일. 메일과 채용 사이트를 확인할 때다.`, rs: pipe.due, k: 14 },
+    { cls: "early", n: pipe.early.length, t: "아직 이른 편", q: `제출 후 ${P25}일 미만.`, rs: pipe.early, k: 6 },
+    { cls: "late", n: pipe.late.length + pipe.silent.length, t: "평소보다 늦음",
+      q: `${P75}일 초과. 서류 탈락 통보는 보통 ${DOCFAIL_MED ?? "—"}일쯤 왔고, ${P90}일을 넘긴 ${pipe.silent.length}건은 통보 없는 탈락일 수 있다.`,
+      rs: [...pipe.late, ...pipe.silent], k: 6 },
+  ];
+  $("#waitGroups").innerHTML = groups.map(g => `<div class="wg ${g.cls}"><div class="wg-hd"><span class="n">${g.n}</span><span class="t">${g.t}</span></div>`
+    + `<div class="q">${g.q}</div>${g.rs.length ? `<div class="names">${names(g.rs, g.k)}</div>` : ""}</div>`).join("");
+}
+
+function renderWhere() {
+  const { rows, base } = hitRatios();
+  const ok = rows.filter(r => r.n >= 8).sort((a, b) => b.rate - a.rate || b.n - a.n);
+  const max = Math.max(base, ...ok.map(r => r.rate), 0.01);
+  const hidden = rows.filter(r => r.n < 8).length;
+  $("#where").innerHTML = ok.map(r => {
+    const over = r.rate >= base;
+    return `<li class="${over ? "" : "under"}"><span class="nm"><span class="axis">${escapeHTML(r.tag)}</span> ${escapeHTML(r.name)}</span>`
+      + `<span class="bar"><i style="width:${Math.max(r.rate / max * 100, r.rate ? 2 : 0)}%"></i><u style="left:${base / max * 100}%"></u></span>`
+      + `<span class="mx">${fmtPct(r.rate)} <span class="axis">${r.pass}/${r.n}</span></span></li>`;
+  }).join("");
+  const zero = ok.filter(r => r.pass === 0);
+  if (!ok.length) {
+    $("#whereNote").textContent = `결과가 8건 이상 나온 묶음이 아직 없다.${hidden ? ` 표본이 모자란 묶음 ${hidden}개.` : ""}`;
+    return;
+  }
+  $("#whereNote").innerHTML = `세로 눈금은 전체 평균 <b>${fmtPct(base)}</b>.`
+    + (zero.length ? ` 아직 한 번도 서류를 넘지 못한 묶음은 ${zero.map(r => `<b>${escapeHTML(r.name)}</b>(0/${r.n})`).join(", ")}.` : "")
+    + (hidden ? ` 표본 8건 미만 ${hidden}개 묶음은 뺐다.` : "");
+}
+
+function renderGates() {
+  const steps = transitions();
+  if (!steps.length) { $("#gates").innerHTML = `<p class="empty-note">확정된 결과가 아직 없다.</p>`; $("#gatesNote").textContent = ""; return null; }
+  const worst = steps.reduce((a, b) => (b.rate < a.rate ? b : a));
+  $("#gates").innerHTML = steps.map(s => `<div class="gate${s === worst ? " worst" : ""}">`
+    + `<span class="g-to">${escapeHTML(s.to)}</span><span class="g-rate">${fmtPct(s.rate)}</span>`
+    + `<span class="g-n">${s.num}/${s.den}</span></div>`).join("");
+  const after = steps.filter(s => s !== steps[0]);
+  $("#gatesNote").innerHTML = `가장 좁은 관문은 <b>${escapeHTML(worst.from)} → ${escapeHTML(worst.to)}</b>, ${worst.den}건 중 ${worst.den - worst.num}건이 여기서 끝났다.`
+    + (after.length && worst === steps[0] ? ` 서류를 넘긴 뒤에는 ${after.map(s => `${escapeHTML(s.to)} ${fmtPct(s.rate)}`).join(", ")}였다.` : "");
+  return worst;
+}
+
+function renderPace() {
+  const weeks = weekCounts(12);
+  const cur = weeks.at(-1), prev = weeks.slice(-5, -1);
+  const avg4 = prev.reduce((a, w) => a + w.n, 0) / prev.length;
+  const passedDays = (day(TODAY).getDay() + 6) % 7 + 1;
+  $("#paceDesc").innerHTML = `이번 주(월요일부터 ${passedDays}일) <b>${cur.n}건</b>, 직전 4주 평균 주 <b>${avg4.toFixed(0)}건</b>.`;
+  const svg = $("#chPace");
+  const W = Math.max(svg.parentElement.clientWidth || 460, 320), H = 150;
+  const M = { l: 6, r: 6, t: 18, b: 22 };
+  const iw = W - M.l - M.r, ih = H - M.t - M.b;
+  const max = Math.max(...weeks.map(w => w.n), 1);
+  const bw = iw / weeks.length;
+  svg.setAttribute("width", W); svg.setAttribute("height", H); svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+  svg.innerHTML = "";
+  weeks.forEach((w, i) => {
+    const h = w.n / max * ih, xx = M.l + i * bw + bw * 0.18, isCur = i === weeks.length - 1;
+    const rect = el("rect", { x: xx, y: M.t + ih - h, width: bw * 0.64, height: Math.max(h, 1.5), rx: 3,
+      fill: "var(--brand)", "fill-opacity": isCur ? 1 : 0.3, class: "mark" });
+    bindTip(rect, `<b>${w.w.slice(5).replace("-", "/")} 주</b><span class="m">제출 ${w.n}건${isCur ? " (진행 중인 주)" : ""}</span>`);
+    svg.appendChild(rect);
+    if (w.n) { const t = el("text", { x: xx + bw * 0.32, y: M.t + ih - h - 5, class: isCur ? "val tab" : "tick tab", "text-anchor": "middle" }); t.textContent = w.n; svg.appendChild(t); }
+    if (i % 2 === weeks.length % 2 || isCur) { const t = el("text", { x: xx + bw * 0.32, y: H - 6, class: "tick tab", "text-anchor": "middle" }); t.textContent = isCur ? "이번 주" : w.w.slice(5).replace("-", "/"); svg.appendChild(t); }
+  });
+  const ya = M.t + ih - avg4 / max * ih;
+  svg.appendChild(el("line", { x1: M.l, y1: ya, x2: W - M.r, y2: ya, stroke: "var(--ink-2)", "stroke-width": 1.2, "stroke-dasharray": "4 4" }));
+  return { cur, avg4 };
+}
+
+function renderDataQuality() {
+  const usable = RECORDS.filter(isCounted);
+  const pending = usable.filter(r => r.o === "PENDING").length;
+  const estimated = RECORDS.filter(r => r.est).length;
+  const heldSegments = hitRatios().rows.filter(r => r.n < 8).length;
+  const pendingRate = pending / usable.length;
+  const cells = [
+    { cls: pendingRate > .3 ? "hold" : "usable", k: "최근 성과 판단", v: pendingRate > .3 ? "보류" : "관측 가능",
+      d: `미결 ${pending}/${usable.length}(${fmtPct(pendingRate)}). 종결 전까지 최근 통과율은 변한다` },
+    { cls: "usable", k: "리드타임", v: `정확 기록 ${LEADS.length}건`, d: `제출일 추정치는 응답 기간 계산에서 뺀다` },
+    { cls: estimated ? "hold" : "usable", k: "지원 시점", v: `추정일 ${estimated}건 포함`, d: `주별 지원량과 표의 ~ 표시를 확인` },
+    { cls: heldSegments ? "hold" : "usable", k: "묶음 비교", v: `판단 보류 ${heldSegments}개`, d: `확정 8건 미만은 순위에서 뺀다` },
+  ];
+  $("#dataQuality").innerHTML = cells.map(c => `<div class="qcell ${c.cls}">`
+    + `<span class="qk">${c.k}</span><span class="qv">${c.v}</span><span class="qd">${c.d}</span></div>`).join("");
+}
+
+function renderHeadline(next, pipe, alive, pace) {
+  const parts = [];
+  if (next && next.dday !== null && next.dday <= 14) {
+    const when = next.dday === 0 ? "오늘" : next.dday === 1 ? "내일" : `${next.dday}일 뒤`;
+    parts.push(`${when} <b>${escapeHTML(next.company)}</b> ${escapeHTML(String(next.event).split("→")[0].trim())}.`);
+  }
+  if (alive.length) {
+    const top = alive[0];
+    parts.push(`서류를 넘어 진행 중인 지원은 <b>${escapeHTML(top.c)}</b>(${STAGE_NAME[top.s]})${alive.length > 1 ? ` 외 ${alive.length - 1}건` : " 1건"}.`);
+  } else parts.push("서류를 넘어 진행 중인 지원은 없다.");
+  if (pipe.due.length) parts.push(`결과가 나올 시기인 지원이 <b>${pipe.due.length}건</b> 있다.`);
+  if (pace) parts.push(`이번 주 ${pace.cur.n}건 제출.`);
+  $("#headline").innerHTML = parts.join(" ");
+  $("#headlineSrc").textContent = `${LOADED.sample ? "가상 예시 데이터" : "가져온 CSV"}, 지원 ${RECORDS.length}건 기록에서 계산`;
+}
+
+function renderBrief() {
+  renderRecentChanges();
+  const next = renderDday();
+  const alive = renderAlive();
+  renderRecentResults();
+  const pipe = pipeline();
+  renderWait(pipe);
+  renderWhere();
+  renderGates();
+  const pace = renderPace();
+  renderDataQuality();
+  renderHeadline(next, pipe, alive, pace);
+}
+
+/* ═══════════════ 탭 ═══════════════ */
+let ACTIVE = "brief";
+function showPane(name) {
+  ACTIVE = name;
+  document.querySelectorAll(".pane").forEach(p => p.hidden = p.id !== `pane-${name}`);
+  document.querySelectorAll("#tabs button").forEach(b =>
+    b.setAttribute("aria-selected", String(b.dataset.pane === name)));
+  if (name === "brief") renderBrief();
+  if (name === "stats") renderAll();
+  if (name === "table") renderTable();
+}
+$("#tabs").addEventListener("click", e => {
+  const btn = e.target.closest("button[data-pane]");
+  if (btn) showPane(btn.dataset.pane);
+});
+
+/* ─────────────────── 렌더 ─────────────────── */
+function renderAll() {
+  renderWeek(); renderFunnel(); renderDeath(); renderTrend(); renderSeg(); renderLead(); renderTable();
+}
+renderTiles(); renderRuleBasedFindings(); renderBrief();
+fill("#fT", "t"); fill("#fE", "e"); fill("#fJ", "j");
+$("#q").addEventListener("input", e => { TBL.q = e.target.value; renderTable(); });
+$("#oChips").addEventListener("click", e => {
+  const b = e.target.closest("button[data-o]");
+  if (!b) return;
+  TBL.o = b.dataset.o;
+  $("#oChips").querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", String(x === b)));
+  renderTable();
+});
+$("#fReset").onclick = () => {
+  FILTERS.t = FILTERS.e = FILTERS.j = "전체";
+  ["#fT", "#fE", "#fJ"].forEach(s => $(s).value = "전체");
+  renderAll();
+};
+$("#themeBtn").onclick = () => {
+  const cur = document.documentElement.getAttribute("data-theme");
+  const next = cur === "dark" ? "light" : cur === "light" ? "dark" :
+    (matchMedia("(prefers-color-scheme: dark)").matches ? "light" : "dark");
+  document.documentElement.setAttribute("data-theme", next);
+  if (ACTIVE === "brief") renderBrief(); else renderAll();
+};
+const syncStatus = $("#syncStatus");
+$("#hdrSrc").textContent = LOADED.sample ? "가상 예시 데이터" : "가져온 CSV";
+$("#sampleBtn").hidden = !STORED;
+if (STORED && LOADED.sample) {
+  syncStatus.textContent = "저장된 CSV를 읽지 못해 예시를 보여 준다.";
+  syncStatus.className = "sync-status error";
+}
+$("#importBtn").onclick = () => $("#csvFile").click();
+$("#csvFile").onchange = async e => {
+  const file = e.target.files[0];
+  e.target.value = "";
+  if (!file) return;
+  const text = JobdashCSV.decode(await file.arrayBuffer());
+  const result = JobdashCSV.parse(text, { today: TODAY });
+  if (result.errors.length || !result.records.length) {
+    const errs = result.errors.length ? result.errors : ["읽을 수 있는 지원 기록이 없다."];
+    syncStatus.textContent = `가져오지 못했다. ${errs[0]}${errs.length > 1 ? ` 외 ${errs.length - 1}건` : ""}`;
+    syncStatus.title = errs.join("\n");
+    syncStatus.className = "sync-status error";
+    return;
+  }
+  /* 새 CSV 저장이 성공한 뒤에만 비교 기준을 남긴다. 기준 저장 실패는 비교 카드만 빠진다. */
+  try {
+    localStorage.setItem(STORE_KEY, text);
+  } catch (_) {
+    syncStatus.textContent = "브라우저 저장소에 쓸 수 없다. 사생활 보호 모드인지 확인해 달라.";
+    syncStatus.className = "sync-status error";
+    return;
+  }
+  if (!LOADED.sample) storeRefreshSnapshot();
+  else try { localStorage.removeItem(REFRESH_RECENT_KEY); } catch (_) {}
+  location.reload();
+};
+$("#sampleBtn").onclick = () => {
+  if (!confirm("가져온 CSV를 이 브라우저에서 지우고 예시로 되돌릴까? 원본 CSV 파일은 그대로다.")) return;
+  try { [STORE_KEY, REFRESH_BEFORE_KEY, REFRESH_RECENT_KEY].forEach(k => localStorage.removeItem(k)); }
+  catch (_) {
+    syncStatus.textContent = "브라우저 저장소를 지우지 못했다. 브라우저 설정에서 이 사이트 데이터를 지워 달라.";
+    syncStatus.className = "sync-status error";
+    return;
+  }
+  location.reload();
+};
+addEventListener("resize", () => {
+  clearTimeout(window.__rz);
+  window.__rz = setTimeout(() => {
+    if (ACTIVE === "brief") renderBrief(); else renderAll();
+  }, 150);
+});
+renderAll();
+showPane("brief");
+</script>
+</body>
+</html>
